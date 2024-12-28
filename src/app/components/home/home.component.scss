@@ -1,0 +1,35 @@
+.carousel{
+    margin-bottom: 20px;
+}
+
+.carousel-item {
+    height: 75vh; /* Asegura que los elementos del carrusel ocupen toda la altura del carrusel */
+  }
+  
+  .carousel-item img {
+    height: 100%; /* Ajusta la imagen al contenedor */
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho */
+    object-fit: cover; /* Centra la imagen y mantiene su relación de aspecto */
+    object-position: center; /* Centra la imagen */
+  }
+
+  .carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #007bff; /* Cambia este color al que desees */
+  border-radius: 50%; /* Opcional: añade un borde redondeado */
+  padding: 10px; /* Opcional: añade un padding para hacer el icono más grande */
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+    padding: 1rem; /* Espaciado alrededor del texto */
+    border-radius: 0.5rem; /* Bordes redondeados */
+    width: 35%; /* Ajusta el ancho del caption */
+    left: 50%; /* Centra el caption horizontalmente */
+    transform: translateX(-50%); /* Centra el caption horizontalmente */
+  }
+  
+  .carousel-caption h3,
+  .carousel-caption p {
+    color: #ffffff; /* Color del texto blanco */
+  }
