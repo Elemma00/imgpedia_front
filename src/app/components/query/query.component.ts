@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { createSparqlEditor } from 'sparql-editor';
 import { FormComponent } from './form/form.component';
+import { SparqlQueryDTO } from '../../models/SparqlQueryDTO';
 
 @Component({
   selector: 'app-query',
@@ -10,15 +11,20 @@ import { FormComponent } from './form/form.component';
   styleUrl: './query.component.scss'
 })
 export class QueryComponent implements AfterViewInit, OnInit {
+  
   queryText!: string;
+  loading!:boolean;
 
-  constructor() { }
+  constructor() {
+    this.loading = false;
+  }
 
   ngOnInit(): void {
     this.queryText ='SELECT ?Source ?Target ?Distance WHERE{ ?Rel <http://imgpedia.dcc.uchile.cl/ontology#sourceImage> ?Source;\n' +
     ' <http://imgpedia.dcc.uchile.cl/ontology#targetImage> ?Target;\n' +
     ' <http://imgpedia.dcc.uchile.cl/ontology#distance> ?Distance .\n' +
     '} LIMIT 10';
+    
   }
 
 
@@ -38,6 +44,10 @@ export class QueryComponent implements AfterViewInit, OnInit {
         value: this.queryText,
       });
     }
+  }
+
+  receiveResults($event: any) {
+    console.log("se ejecuto la cosita xddd");
   }
 
 }

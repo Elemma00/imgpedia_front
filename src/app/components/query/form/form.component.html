@@ -1,5 +1,5 @@
 <form class="w-50" (ngSubmit)="runQuery(queryForm)" #queryForm="ngForm">
-    <fieldset>
+    <fieldset [disabled]="loading">
         <div class="my-3 d-flex align-items-center">
             <label for="format" class="form-label me-2">Results Format</label>
             <select class="form-select custom-border" name="format" id="format" [(ngModel)]="format"> 
@@ -13,13 +13,20 @@
 
         <div class="my-3 d-flex align-items-center">
             <label for="timeout" class="form-label me-3">Execution Timeout (ms)</label>
-            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel"/>
+            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel" placeholder="Set Timeout Here"/>
             <br />
         </div>
 
         <div class="my-3 align-items-center">
-            <button class="btn btn-primary me-3">Run Query</button>
-            <button class="btn btn-warning me-3">Reset</button>
+            @if (!loading) {
+                <button class="btn btn-primary me-3" type="submit">Run Query</button>
+            }
+            @else {
+                <div class="spinner-border text-primary mx-3" role="status"></div>
+                <div class="btn btn-danger me-3" type="button" (click)="stop()">Stop</div>
+            }
+            <div class="btn btn-warning me-3" type="button" (click)="reset()">Reset</div>
+            
         </div>
     </fieldset>
 </form>
