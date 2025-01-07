@@ -1,0 +1,25 @@
+<form class="w-50" (ngSubmit)="runQuery(queryForm)" #queryForm="ngForm">
+    <fieldset>
+        <div class="my-3 d-flex align-items-center">
+            <label for="format" class="form-label me-2">Results Format</label>
+            <select class="form-select custom-border" name="format" id="format" [(ngModel)]="format"> 
+                <option value="table">TABLE</option>
+                <option value="json">JSON</option>
+                <option value="xml">XML</option>
+                <option value="csv">CSV</option>
+                <option value="tsv">TSV</option>
+            </select>
+        </div>
+
+        <div class="my-3 d-flex align-items-center">
+            <label for="timeout" class="form-label me-3">Execution Timeout (ms)</label>
+            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel"/>
+            <br />
+        </div>
+
+        <div class="my-3 align-items-center">
+            <button class="btn btn-primary me-3">Run Query</button>
+            <button class="btn btn-warning me-3">Reset</button>
+        </div>
+    </fieldset>
+</form>
