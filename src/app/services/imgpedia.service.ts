@@ -13,4 +13,8 @@ export class ImgpediaService {
   runQuery(queryDTO: any): Observable<any> {
     return this.http.post(environment.IMGPEDIA_API_QUERY_URL, queryDTO, { responseType: 'text' });
   }
+
+  stopQuery(){
+    return this.http.post(`${environment.IMGPEDIA_API_QUERY_URL}/stop`, {});
+  }
 }

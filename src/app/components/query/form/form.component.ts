@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { catchError, throwError } from 'rxjs';
+import { catchError, delay, Subscription, throwError } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
-export class FormComponent implements OnInit{
+export class FormComponent implements OnInit {
 
   @Input() queryText!: string;
   @Input() loading!: boolean;
@@ -22,8 +22,10 @@ export class FormComponent implements OnInit{
 
   format: string = 'json';
   timeout: number = 0;
+  private querySubscription!: Subscription;
 
-  constructor(private imgpediaService: ImgpediaService) {}
+
+  constructor(private imgpediaService: ImgpediaService) { }
 
   ngOnInit(): void {
   }
@@ -39,12 +41,12 @@ export class FormComponent implements OnInit{
       };
       console.log(queryDTO);
 
-      this.imgpediaService.runQuery(queryDTO)
+      this.querySubscription = this.imgpediaService.runQuery(queryDTO)
         .pipe(
           catchError(error => {
             console.error('Query error:', error);
             this.loading = false;
-            return throwError(error);
+            return throwError(() => new Error(error));
           })
         )
         .subscribe(response => {
@@ -55,7 +57,19 @@ export class FormComponent implements OnInit{
     }
   }
 
-  stop(){};
+  stop() {
+    if (this.querySubscription) {
+      this.querySubscription.unsubscribe();
+      this.loading = false;
+      this.imgpediaService.stopQuery().subscribe({
+        next: response => console.log(response),
+        error: error => console.error('Error stop:', error)
+      });
+    }
+  }
 
-  reset(){};
+  reset(queryForm: NgForm) {
+    this.stop();
+    window.location.reload();
+  }
 }
