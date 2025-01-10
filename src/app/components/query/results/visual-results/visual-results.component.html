@@ -1,0 +1,29 @@
+
+<hr>
+<mat-grid-list cols="{{headerLength()}}" rowHeight="50px" gutterSize="10px">
+
+    @for (column of sparqlResult.head.vars; track $index) {
+      <mat-grid-tile>
+        <h4>{{ column }}</h4>
+      </mat-grid-tile>
+    }
+    @if(sparqlResult.results.bindings.length > 0 ){
+      @for (row of sparqlResult.results.bindings; track $index) {
+        <mat-grid-tile>
+          
+        </mat-grid-tile>
+      }
+    } @else{
+      <mat-grid-tile colspan="3">
+        <h4>No Results Found</h4>
+      </mat-grid-tile>
+    }
+
+</mat-grid-list>
+<hr>
+
+<!-- @for (key of columnsKeys(); track $index) {
+    <div class="columns" [ngStyle]="{'width': colWidth}">
+        
+    </div>
+} -->

@@ -12,7 +12,7 @@
         <form-query [queryText]="queryText" [loading]="loading" (resultsEmitter)="receiveResults($event)"></form-query>
         
         @if(results){
-            <results></results>
+            <results [sparqlResult]="results"></results>
         }
     </div>
 

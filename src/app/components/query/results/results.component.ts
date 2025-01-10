@@ -1,21 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SparqlResult } from '../../../models/SparqlResult';
+import { VisualResultsComponent } from './visual-results/visual-results.component';
 
 @Component({
   selector: 'results',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, VisualResultsComponent],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
 })
-export class ResultsComponent {
+export class ResultsComponent{
+  @Input() sparqlResult!: SparqlResult;
+  
   selectedView: string = 'table'; // Valor predeterminado
-  tableColumns: string[] = ['Column 1', 'Column 2', 'Column 3']; // Ejemplo de columnas
-  tableData: any[][] = [
-    ['Data 1', 'Data 2', 'Data 3'],
-    ['Data 4', 'Data 5', 'Data 6'],
-    ['Data 7', 'Data 8', 'Data 9']
-  ]; // Ejemplo de datos de tabla
 
   constructor() { }
 

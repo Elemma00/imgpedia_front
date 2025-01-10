@@ -49,8 +49,8 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   receiveResults($event: any) {
-    console.log("se ejecuto la cosita xddd");
-    this.results = $event;
+    this.results = JSON.parse($event);
+
   }
 
 }

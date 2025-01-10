@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { catchError, delay, Subscription, throwError } from 'rxjs';
+import { catchError, delay, Subscription, throwError, timeout } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
 import { CommonModule } from '@angular/common';
@@ -43,14 +43,19 @@ export class FormComponent implements OnInit {
 
       this.querySubscription = this.imgpediaService.runQuery(queryDTO)
         .pipe(
+          this.timeout > 0 ? timeout(this.timeout) : source => source,
           catchError(error => {
-            console.error('Query error:', error);
+            if(error.name==='TimeoutError'){
+              console.error('Query timeout:', error);
+              this.stop();
+            }else{
+              console.error('Error:', error);
+            }
             this.loading = false;
             return throwError(() => new Error(error));
           })
         )
         .subscribe(response => {
-          console.log(response);
           this.resultsEmitter.emit(response);
           this.loading = false;
         });

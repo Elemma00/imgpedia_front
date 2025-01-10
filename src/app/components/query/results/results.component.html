@@ -8,27 +8,48 @@
       </div>
     </div>
   
-    <div *ngIf="selectedView === 'table'" class="row">
-      <div class="col">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th *ngFor="let column of tableColumns">{{ column }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of tableData">
-              <td *ngFor="let cell of row">{{ cell }}</td>
-            </tr>
-          </tbody>
-        </table>
+    @if(selectedView === 'table'){
+      <div class="row">
+        <div class="col">
+          <table class="table table-light table-responsive table-striped table-hover table-bordered">
+            <thead>
+              <tr>
+                @for (column of sparqlResult.head.vars; track $index) {
+                  <th>{{ column }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              @if(sparqlResult.results.bindings.length > 0 ){
+                @for (row of sparqlResult.results.bindings; track $index) {
+                  <tr class="table-info">
+                    @for (column of sparqlResult.head.vars; track $index) {
+                      <td>{{ row[column].value }}</td>
+                    }
+                  </tr>
+                }
+
+              }@else{
+                <tr class="table-warning">
+                  <td [attr.colspan]="sparqlResult.head.vars.length">
+                    No Results Found
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  
-    <div *ngIf="selectedView === 'visual'" class="row">
-      <div class="col">
-        <!-- Aquí puedes definir el formato visual que desees -->
-        <p>Visual Results will be displayed here.</p>
+    }
+
+    @else if(selectedView === 'visual') {
+      <div class="row">
+        <div class="col">
+          <visual-results [sparqlResult]="sparqlResult"/>
+        </div>
       </div>
-    </div>
+    }
   </div>
+   
+  
+  
