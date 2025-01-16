@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { createSparqlEditor } from 'sparql-editor';
 import { FormComponent } from './form/form.component';
@@ -16,6 +16,9 @@ export class QueryComponent implements AfterViewInit, OnInit {
   queryText!: string;
   loading!:boolean;
   results!: any;
+  errorMessage: string | null = null;
+
+  @ViewChild('resultsTable') resultsTable!: ElementRef;
 
   constructor() {
     this.loading = false;
@@ -49,10 +52,22 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   receiveResults($event: any) {
-    this.results = JSON.parse($event);
-
+    this.results = $event;
+    // this.results = JSON.parse($event);
+    this.errorMessage = null;
+    this.scrollToResults();
   }
 
+  handleError(error: string) {
+    this.errorMessage = error;
+    this.results = null; 
+  }
+
+  scrollToResults() {
+    if (this.resultsTable) {
+      this.resultsTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }
 
 

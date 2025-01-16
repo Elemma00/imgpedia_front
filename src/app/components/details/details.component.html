@@ -1,1 +1,58 @@
-<p>details works!</p>
+<div class="details container">
+    <mat-toolbar color="primary" class="banner">
+        <strong class="filename">{{parseText(detail.fileName)}}</strong>
+      </mat-toolbar>
+      <br>
+      <mat-card class="main-card">
+        <a [href]=detail.originalUrl><img mat-card-image [src]=detail.thumbUrl></a>
+        <mat-card-content>
+          <p><b>File: </b>{{parseText(detail.fileName)}}</p>
+      
+          @if (detail.height) {
+              <p><b>Height:</b>{{detail.height}}</p>
+          }
+          
+          @if (associatedWith().length > 0) {
+            <div>
+                <b>Associated with</b>
+                <div class="links">
+                @for (associated of associatedWith(); track $index) {
+                    <a [href]=associated>{{parseText(associated)}}</a>
+                }
+                </div>
+            </div>
+          }
+        
+          @if(appearsIn().length > 0){
+              <div>
+                <b>Appears in</b>
+                <div class="links">
+                @for (appear of appearsIn(); track $index) {
+                    <a [href]=appear>{{parseText(appear)}}</a>
+                }
+                </div>
+              </div>
+          }
+      
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-tab-group>
+        @for (desc of getDescriptors(); track $index) {
+            <mat-tab label={{formatDescriptorName(desc)}}>
+              <mat-grid-list cols="6" rowHeight="6:3" gutterSize="15px">
+                @for (sim of descriptors[desc]; track $index) {
+                    <mat-grid-tile>
+                      <a [routerLink]="['/detail', sim.fileName]" class="binding"><img [src]="sim.thumbUrl"
+                                                                                       [alt]="sim.distance"></a>
+                      <mat-grid-tile-footer class="distance-descriptor">
+                        <p>{{sim.distance}}</p>
+                      </mat-grid-tile-footer>
+                    </mat-grid-tile>
+                }
+              </mat-grid-list>
+            </mat-tab>
+        }
+      
+      </mat-tab-group>
+</div>

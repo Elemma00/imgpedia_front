@@ -4,6 +4,7 @@ import { catchError, delay, Subscription, throwError, timeout } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
 import { CommonModule } from '@angular/common';
+import { DUMMY_SPARQL_RESULT } from '../../../util/dummy-data';
 
 @Component({
   selector: 'form-query',
@@ -18,6 +19,7 @@ export class FormComponent implements OnInit {
 
   @Output() resultsEmitter = new EventEmitter();
   @Output() stopEmitter = new EventEmitter();
+  @Output() errorEmitter = new EventEmitter<string>();
 
 
   format: string = 'json';
@@ -39,26 +41,33 @@ export class FormComponent implements OnInit {
         format: this.format,
         timeout: this.timeout
       };
-      console.log(queryDTO);
 
-      this.querySubscription = this.imgpediaService.runQuery(queryDTO)
-        .pipe(
-          this.timeout > 0 ? timeout(this.timeout) : source => source,
-          catchError(error => {
-            if(error.name==='TimeoutError'){
-              console.error('Query timeout:', error);
-              this.stop();
-            }else{
-              console.error('Error:', error);
-            }
-            this.loading = false;
-            return throwError(() => new Error(error));
-          })
-        )
-        .subscribe(response => {
-          this.resultsEmitter.emit(response);
-          this.loading = false;
-        });
+      console.log(queryDTO);
+      let response = DUMMY_SPARQL_RESULT;
+      this.resultsEmitter.emit(response);
+      this.loading = false;
+      // this.querySubscription = this.imgpediaService.runQuery(queryDTO)
+      //   .pipe(
+      //     this.timeout > 0 ? timeout(this.timeout) : source => source,
+      //     catchError(error => {
+      //       if(error.name==='TimeoutError'){
+      //         console.error('Query timeout:', error);
+      //         this.stop();
+      //       } else if (error.message.includes('ERR_CONNECTION_REFUSED')) {
+      //         console.error('Connection error:', error);
+      //         this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
+      //       } else {
+      //         console.error('Query error:', error);
+      //         this.errorEmitter.emit(error.message);
+      //       }
+      //       this.loading = false;
+      //       return throwError(() => new Error(error));
+      //     })
+      //   )
+      //   .subscribe(response => {
+      //     this.resultsEmitter.emit(response);
+      //     this.loading = false;
+      //   });
     }
   }
 

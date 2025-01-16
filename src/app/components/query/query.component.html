@@ -9,10 +9,14 @@
 
         <div id="inputSparql"></div>
 
-        <form-query [queryText]="queryText" [loading]="loading" (resultsEmitter)="receiveResults($event)"></form-query>
+        <form-query [queryText]="queryText" [loading]="loading" (resultsEmitter)="receiveResults($event)" (errorEmitter)="handleError($event)"></form-query>
         
-        @if(results){
-            <results [sparqlResult]="results"></results>
+        @if(results && errorMessage === null){
+            <results #resultsTable [sparqlResult]="results"></results>
+        }@else if(errorMessage){ 
+            <div class="alert alert-danger" role="alert">
+                {{ errorMessage }}
+            </div>
         }
     </div>
 

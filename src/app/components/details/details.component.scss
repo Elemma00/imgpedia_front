@@ -1,0 +1,58 @@
+.details {
+    margin-top: 5rem;
+}
+
+.banner {
+    height: 50px;
+    color: #87CEEB;
+  
+    a {
+      height: inherit;
+      margin-right: 2%;
+      margin-top: 20px;
+      margin-bottom: 15px;
+  
+      .logo {
+        height: 90%;
+      }
+    }
+  
+    .filename {
+      text-align: center;
+      text-overflow: ellipsis
+    }
+  }
+  
+  .main-card {
+    width: 50%;
+    margin-left: 25%;
+  
+    img {
+      max-width: 400px;
+      max-height: 400px;
+      height: auto;
+      width: auto;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  
+    .links {
+      text-overflow: ellipsis;
+    }
+  }
+  
+  .distance-descriptor {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s linear;
+    word-wrap: break-word;
+  }
+  
+  .binding:hover + .distance-descriptor {
+    opacity: 1;
+    transition: all 0.3s linear;
+    visibility: visible;
+  }
+  
+  

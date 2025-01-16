@@ -1,0 +1,8 @@
+<mat-grid-list class="grid-list" cols="1" [rowHeight]="rowHeight">
+    @for (v of values; track $index) {
+        <mat-grid-tile>
+          <div class="link"><a [href]="v" fittext="0.9">{{v}}</a></div>
+        </mat-grid-tile>
+    }
+  </mat-grid-list>
+  

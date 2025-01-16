@@ -1,0 +1,8 @@
+<mat-grid-list class="grid-list" cols="1" [rowHeight]="rowHeight">
+    @for (v of parsedValues; track $index) {
+        <mat-grid-tile>
+            <p>{{v}}</p>
+        </mat-grid-tile>
+        }  
+</mat-grid-list>
+  
