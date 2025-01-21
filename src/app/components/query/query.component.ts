@@ -4,6 +4,7 @@ import { createSparqlEditor } from 'sparql-editor';
 import { FormComponent } from './form/form.component';
 import { SparqlQueryDTO } from '../../models/SparqlQueryDTO';
 import { ResultsComponent } from './results/results.component';
+import { Constants } from '../../util/constants.model';
 
 @Component({
   selector: 'app-query',
@@ -25,11 +26,7 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.queryText ='SELECT ?Source ?Target ?Distance WHERE{ ?Rel <http://imgpedia.dcc.uchile.cl/ontology#sourceImage> ?Source;\n' +
-    ' <http://imgpedia.dcc.uchile.cl/ontology#targetImage> ?Target;\n' +
-    ' <http://imgpedia.dcc.uchile.cl/ontology#distance> ?Distance .\n' +
-    '} LIMIT 10';
-    
+    this.queryText = Constants.INITIAL_QUERY;
   }
 
 
@@ -52,21 +49,15 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   receiveResults($event: any) {
-    this.results = $event;
-    // this.results = JSON.parse($event);
+    // this.results = $event;
+    this.results = JSON.parse($event);
+    console.log(this.results);
     this.errorMessage = null;
-    this.scrollToResults();
   }
 
   handleError(error: string) {
     this.errorMessage = error;
     this.results = null; 
-  }
-
-  scrollToResults() {
-    if (this.resultsTable) {
-      this.resultsTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }
 }
 

@@ -20,4 +20,18 @@ export class ResultsComponent{
   setView(view: string) {
     this.selectedView = view;
   }
+
+  verifyArity(): boolean {
+    const vars = this.sparqlResult.head.vars;
+    const bindings = this.sparqlResult.results.bindings;
+
+    for (const binding of bindings) {
+      for (const variable of vars) {
+        if (!binding.hasOwnProperty(variable)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }

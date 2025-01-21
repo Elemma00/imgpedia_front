@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { catchError, Subscription, throwError, timeout } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
 import { DUMMY_SPARQL_RESULT } from '../../../util/dummy-data';
@@ -43,31 +43,31 @@ export class FormComponent implements OnInit {
       };
 
       console.log(queryDTO);
-      let response = DUMMY_SPARQL_RESULT;
-      this.resultsEmitter.emit(response);
-      this.loading = false;
-      // this.querySubscription = this.imgpediaService.runQuery(queryDTO)
-      //   .pipe(
-      //     this.timeout > 0 ? timeout(this.timeout) : source => source,
-      //     catchError(error => {
-      //       if(error.name==='TimeoutError'){
-      //         console.error('Query timeout:', error);
-      //         this.stop();
-      //       } else if (error.message.includes('ERR_CONNECTION_REFUSED')) {
-      //         console.error('Connection error:', error);
-      //         this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
-      //       } else {
-      //         console.error('Query error:', error);
-      //         this.errorEmitter.emit(error.message);
-      //       }
-      //       this.loading = false;
-      //       return throwError(() => new Error(error));
-      //     })
-      //   )
-      //   .subscribe(response => {
-      //     this.resultsEmitter.emit(response);
-      //     this.loading = false;
-      //   });
+      // let response = DUMMY_SPARQL_RESULT;
+      // this.resultsEmitter.emit(response);
+      // this.loading = false;
+      this.querySubscription = this.imgpediaService.runQuery(queryDTO)
+        .pipe(
+          this.timeout > 0 ? timeout(this.timeout) : source => source,
+          catchError(error => {
+            if(error.name==='TimeoutError'){
+              console.error('Query timeout:', error);
+              this.stop();
+            } else if (error.message.includes('ERR_CONNECTION_REFUSED')) {
+              console.error('Connection error:', error);
+              this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
+            } else {
+              console.error('Query error:', error);
+              this.errorEmitter.emit(error.message);
+            }
+            this.loading = false;
+            return throwError(() => new Error(error));
+          })
+        )
+        .subscribe(response => {
+          this.resultsEmitter.emit(response);
+          this.loading = false;
+        });
     }
   }
 

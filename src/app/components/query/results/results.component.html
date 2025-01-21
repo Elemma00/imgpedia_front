@@ -11,33 +11,40 @@
     @if(selectedView === 'table'){
       <div class="row">
         <div class="col">
-          <table class="table table-light table-responsive table-striped table-hover table-bordered" style="height: 500px; width: 400px;">
-            <thead>
-              <tr>
-                @for (column of sparqlResult.head.vars; track $index) {
-                  <th>{{ column }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              @if(sparqlResult.results.bindings.length > 0 ){
-                @for (row of sparqlResult.results.bindings; track $index) {
-                  <tr class="table-info">
-                    @for (column of sparqlResult.head.vars; track $index) {
-                      <td>{{ row[column].value }}</td>
-                    }
+          @if(verifyArity()){
+            <table class="table table-light table-striped table-hover table-bordered">
+              <thead>
+                <tr>
+                  @for (column of sparqlResult.head.vars; track $index) {
+                    <th>{{ column }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody class="table-group-divider">
+                @if(sparqlResult.results.bindings.length > 0 ){
+                  @for (row of sparqlResult.results.bindings; track $index) {
+                    <tr class="table-info">
+                      @for (column of sparqlResult.head.vars; track $index) {
+                        <td>{{ row[column].value }}</td>
+                      }
+                    </tr>
+                  }
+  
+                }@else{
+                  <tr class="table-warning">
+                    <td [attr.colspan]="sparqlResult.head.vars.length">
+                      No Results Found
+                    </td>
                   </tr>
                 }
-
-              }@else{
-                <tr class="table-warning">
-                  <td [attr.colspan]="sparqlResult.head.vars.length">
-                    No Results Found
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          } @else {
+            <div class="alert alert-danger" role="alert">
+              The number of columns in the result does not match the number of columns in the header.
+              Please check your query and try again.
+            </div>
+          }
         </div>
       </div>
     }
