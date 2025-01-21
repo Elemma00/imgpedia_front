@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { catchError, delay, Subscription, throwError, timeout } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
-import { CommonModule } from '@angular/common';
 import { DUMMY_SPARQL_RESULT } from '../../../util/dummy-data';
 
 @Component({

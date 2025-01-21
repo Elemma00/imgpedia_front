@@ -10,7 +10,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { DUMMY_DESCRIPTORS, DUMMY_SIMILARS_NAMES } from '../../util/dummy-data';
+import { DUMMY_BINDINGS, DUMMY_DESCRIPTORS, DUMMY_IMG_DETAIL, DUMMY_SIMILARS_NAMES } from '../../util/dummy-data';
 
 @Component({
   selector: 'app-details',
@@ -50,8 +50,11 @@ export class DetailsComponent implements OnInit {
   }
 
   formatDescriptorName(descUrl: string): string {
+    if (!descUrl) {
+      return '';
+    }
     const s = descUrl.split('#');
-    return s[1].toUpperCase();
+    return s[1] ? s[1].toUpperCase() : '';
   }
 
   associatedWith(): string[] {
@@ -133,37 +136,52 @@ export class DetailsComponent implements OnInit {
       }
     );
 
-    this.http.getImgInfo(this.detail.fileName).subscribe(
-      res => {
-        const results = res.results.bindings;
-        for (const key in results) {
-          if (results.hasOwnProperty(key)) {
-            const r = results[key];
-            if (r.dbp && r.dbp.value) {
-              this.detail.associatedWith.add(r.dbp.value);
-            }
-            if (r.wiki && r.wiki.value) {
-              this.detail.appearsIn.add(r.wiki.value);
-            }
-          }
-        }
-      }
-    );
+    this.detail.associatedWith = DUMMY_IMG_DETAIL.associatedWith;
+    this.detail.appearsIn = DUMMY_IMG_DETAIL.appearsIn;
+
+    // TODO: descomentar esto cuando este implementado el servidor de imgpedia
+    // this.http.getImgInfo(this.detail.fileName).subscribe(
+    //   res => {
+    //     const results = res.results.bindings;
+    //     for (const key in results) {
+    //       if (results.hasOwnProperty(key)) {
+    //         const r = results[key];
+    //         if (r.dbp && r.dbp.value) {
+    //           this.detail.associatedWith.add(r.dbp.value);
+    //         }
+    //         if (r.wiki && r.wiki.value) {
+    //           this.detail.appearsIn.add(r.wiki.value);
+    //         }
+    //       }
+    //     }
+    //   }
+    // );
   }
 
   getImgInfoAndBindings(): void {
-    this.http.getImgBindings(this.detail.fileName).subscribe(
-      res => {
-        const bindings = res.results.bindings;
-        if (bindings.length > 0) {
-          for (const key in bindings) {
-            if (bindings.hasOwnProperty(key)) {
-              this.addBinding(bindings[key]);
-            }
-          }
-          this.getSimilarUrls(this.similarsNames);
+    // Usar datos dummy para los bindings
+    const bindings = DUMMY_BINDINGS;
+    if (bindings.length > 0) {
+      for (const key in bindings) {
+        if (bindings.hasOwnProperty(key)) {
+          this.addBinding(bindings[key]);
         }
       }
-    );
+      this.getSimilarUrls(this.similarsNames);
+    }
+
+    // this.http.getImgBindings(this.detail.fileName).subscribe(
+    //   res => {
+    //     const bindings = res.results.bindings;
+    //     if (bindings.length > 0) {
+    //       for (const key in bindings) {
+    //         if (bindings.hasOwnProperty(key)) {
+    //           this.addBinding(bindings[key]);
+    //         }
+    //       }
+    //       this.getSimilarUrls(this.similarsNames);
+    //     }
+    //   }
+    // );
   }
 }

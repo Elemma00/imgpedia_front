@@ -1,4 +1,5 @@
 import { ImgDetailInfo } from "../models/img-detail-info.model";
+import { Binding } from "../models/imgpedia-image-binding-query.model";
 import { SimilarInfo } from "../models/similar-info.model";
 import { SparqlResult } from "../models/SparqlResult";
 
@@ -95,3 +96,18 @@ export const DUMMY_IMG_DETAIL: ImgDetailInfo = {
       new SimilarInfo('http://imgpedia.dcc.uchile.cl/resource/Bercy_sous_la_neige.JPG', 6.0)
     ]
   };
+
+  export const DUMMY_BINDINGS: Binding[] = [
+    {
+      source: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/resource/Biserka-Radisic.jpg' },
+      target: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/resource/Bercy_sous_la_neige.JPG' },
+      desc: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/ontology#Descriptor1' },
+      dist: { type: 'literal', value: '1.0', datatype: 'http://www.w3.org/2001/XMLSchema#float' }
+    },
+    {
+      source: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/resource/dummy_image.jpg' },
+      target: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/resource/similar_image_2.jpg' },
+      desc: { type: 'uri', value: 'http://imgpedia.dcc.uchile.cl/ontology#Descriptor2' },
+      dist: { type: 'literal', value: '2.0', datatype: 'http://www.w3.org/2001/XMLSchema#float' }
+    }
+  ];
