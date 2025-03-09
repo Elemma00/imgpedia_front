@@ -50,7 +50,7 @@ export class FormComponent implements OnInit {
         .pipe(
           this.timeout > 0 ? timeout(this.timeout) : source => source,
           catchError(error => {
-            if(error.name==='TimeoutError'){
+            if (error.name === 'TimeoutError') {
               console.error('Query timeout:', error);
               this.stop();
             } else if (error.message.includes('ERR_CONNECTION_REFUSED')) {
@@ -65,7 +65,7 @@ export class FormComponent implements OnInit {
           })
         )
         .subscribe(response => {
-          this.resultsEmitter.emit(response);
+          this.formatHandler(response, this.format);
           this.loading = false;
         });
     }
@@ -85,5 +85,32 @@ export class FormComponent implements OnInit {
   reset(queryForm: NgForm) {
     this.stop();
     window.location.reload();
+  }
+
+  formatHandler(response: any, format: string) {
+    switch (format) {
+      case 'json':
+        this.resultsEmitter.emit(response);
+        break;
+      case 'xml':
+      case 'csv':
+      case 'tsv':
+        this.downloadFile(response, format);
+        break;
+      default:
+        console.warn('Unknown format:', format);
+    }
+  }
+
+  downloadFile(data: any, format: string) {
+    const blob = new Blob([data], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `results.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 }

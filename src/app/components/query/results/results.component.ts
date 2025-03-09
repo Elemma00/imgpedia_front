@@ -13,7 +13,7 @@ import { VisualResultsComponent } from './visual-results/visual-results.componen
 export class ResultsComponent{
   @Input() sparqlResult!: SparqlResult;
   
-  selectedView: string = 'table'; // Valor predeterminado
+  selectedView: string = 'visual'; // Valor predeterminado
 
   constructor() { }
 

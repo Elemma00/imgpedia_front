@@ -10,12 +10,12 @@
 </mat-grid-list>
 <hr>
 
-@if(sparqlResult.results.bindings.length > 0 ){
+
+
+@if(sparqlResult.results.bindings.length != 0 ){
   <div *ngFor="let k of columnsKeys()" class="columns" [ngStyle]="{'width': colWidth}">
     <ng-container *ngComponentOutlet="columns[k].cls; injector: createInjector(k)"></ng-container>
   </div>
 } @else{
-  <mat-grid-tile colspan="3">
-    <h4>No Results Found</h4>
-  </mat-grid-tile>
+  <h4>No Results Found</h4>
 }

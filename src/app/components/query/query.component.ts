@@ -49,8 +49,15 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   receiveResults($event: any) {
-    // this.results = $event;
-    this.results = JSON.parse($event);
+    // this.results = JSON.parse($event);
+    // console.log(this.results);
+    // this.errorMessage = null;
+    try {
+      this.results = JSON.parse($event);
+    } catch (e) {
+      console.warn('Received data is not valid JSON, using raw data');
+      this.results = $event;
+    }
     console.log(this.results);
     this.errorMessage = null;
   }

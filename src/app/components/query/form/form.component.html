@@ -3,7 +3,7 @@
         <div class="my-3 d-flex align-items-center">
             <label for="format" class="form-label me-2">Results Format</label>
             <select class="form-select custom-border" name="format" id="format" [(ngModel)]="format"> 
-                <option value="json">TABLE</option>
+                <option value="json">NO FORMAT</option>
                 <option value="json">JSON</option>
                 <option value="xml">XML</option>
                 <option value="csv">CSV</option>
@@ -13,7 +13,7 @@
 
         <div class="my-3 d-flex align-items-center">
             <label for="timeout" class="form-label me-3">Execution Timeout (ms)</label>
-            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel" placeholder="Set Timeout Here"/>
+            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel" placeholder="Set Timeout Here (No timeout default)"/>
             <br />
         </div>
 
