@@ -2,9 +2,10 @@
     <div class="sparql container">
         <h3 class="display-6">IMGpedia SPARQL Endpoint</h3>
         
-        <div class="mb-3 w-50">
+        <!-- Se deja esto hidden ya que no se utiliza actualmente multigrafos, todo esta en un solo grafo -->
+        <div hidden class="mb-3 w-50">
             <label class="form-label" for="default-graph-uri">Default Data Set Name (Graph IRI)</label><br />
-            <input class="form-control form-control-sm custom-border"  type="text" name="default-graph-uri" id="default-graph-uri" value="" placeholder="Insert a graph (now using default graph) " size="30"/>
+            <input class="form-control form-control-sm custom-border" type="text" name="default-graph-uri" id="default-graph-uri" value="" placeholder="Insert a graph (now using default graph) " size="30"/>
         </div>
 
         <div id="inputSparql"></div>

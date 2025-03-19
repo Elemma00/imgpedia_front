@@ -1,10 +1,18 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { createSparqlEditor } from 'sparql-editor';
 import { FormComponent } from './form/form.component';
-import { SparqlQueryDTO } from '../../models/SparqlQueryDTO';
 import { ResultsComponent } from './results/results.component';
 import { Constants } from '../../util/constants.model';
+import { EditorView, keymap } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { indentWithTab } from "@codemirror/commands";
+import { basicSetup } from 'codemirror';
+import { search } from "@codemirror/search";
+import { lintGutter } from "@codemirror/lint";
+import { sparql, SparqlLanguage } from '../../util/sparqlEditor/codemirror/index';
+import { keywordCompletionSource, localCompletionSource } from '../../util/sparqlEditor/extentions/complete';
+import { wordHover } from '../../util/sparqlEditor/extentions/tooltip';
+
 
 @Component({
   selector: 'app-query',
@@ -13,9 +21,9 @@ import { Constants } from '../../util/constants.model';
   styleUrl: './query.component.scss'
 })
 export class QueryComponent implements AfterViewInit, OnInit {
-  
+
   queryText!: string;
-  loading!:boolean;
+  loading!: boolean;
   results!: any;
   errorMessage: string | null = null;
 
@@ -35,17 +43,44 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
 
+
+
   initializeEditor() {
+
+    const sparqlKeywordCompletions = SparqlLanguage.data.of({
+      autocomplete: keywordCompletionSource
+    });
+    
+    const sparqlLocalCompletions = SparqlLanguage.data.of({
+      autocomplete: localCompletionSource
+    });
+
     const domElement = document.getElementById('inputSparql');
     if (domElement) {
-      const editor = createSparqlEditor({
+      const editor = new EditorView({
+        state: EditorState.create({
+          doc: this.queryText,
+          extensions: [
+            basicSetup,
+            keymap.of([indentWithTab]),
+            search({ top: true }),
+            lintGutter(),
+            sparql(),
+            SparqlLanguage,
+            sparqlKeywordCompletions,
+            sparqlLocalCompletions,
+            wordHover,
+            EditorView.updateListener.of(update => {
+              if (update.changes) {
+                this.queryText = update.state.doc.toString();
+              }
+            })
+          ],
+        }),
         parent: domElement,
-        onChange: (value: string, codemirrorViewInstance: any) => {
-          this.queryText = value;
-        },
-        value: this.queryText,
       });
     }
+
   }
 
   receiveResults($event: any) {
@@ -64,8 +99,9 @@ export class QueryComponent implements AfterViewInit, OnInit {
 
   handleError(error: string) {
     this.errorMessage = error;
-    this.results = null; 
+    this.results = null;
   }
+
 }
 
 
