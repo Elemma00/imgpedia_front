@@ -57,8 +57,8 @@ export class FormComponent implements OnInit {
               console.error('Connection error:', error);
               this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
             } else {
-              console.error('Query error:', error);
-              this.errorEmitter.emit(error.message);
+              console.error(error.error);
+              this.errorEmitter.emit(error.error);
             }
             this.loading = false;
             return throwError(() => new Error(error));
