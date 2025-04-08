@@ -13,7 +13,7 @@
         <form-query [queryText]="queryText" [loading]="loading" (resultsEmitter)="receiveResults($event)" (errorEmitter)="handleError($event)"></form-query>
         
         @if(results && errorMessage === null){
-            <results #resultsTable [sparqlResult]="results"></results>
+            <results [sparqlResult]="results"></results>
         }@else if(errorMessage){ 
             <div class="alert alert-danger" role="alert">
                 {{ errorMessage }}

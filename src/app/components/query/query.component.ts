@@ -1,17 +1,17 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { FormComponent } from './form/form.component';
-import { ResultsComponent } from './results/results.component';
-import { Constants } from '../../util/constants.model';
-import { EditorView, keymap } from '@codemirror/view';
-import { EditorState } from '@codemirror/state';
 import { indentWithTab } from "@codemirror/commands";
-import { basicSetup } from 'codemirror';
-import { search } from "@codemirror/search";
 import { lintGutter } from "@codemirror/lint";
+import { search } from "@codemirror/search";
+import { EditorState } from '@codemirror/state';
+import { EditorView, keymap } from '@codemirror/view';
+import { basicSetup } from 'codemirror';
+import { Constants } from '../../util/constants.model';
 import { sparql, SparqlLanguage } from '../../util/sparqlEditor/codemirror/index';
 import { keywordCompletionSource, localCompletionSource } from '../../util/sparqlEditor/extentions/complete';
 import { wordHover } from '../../util/sparqlEditor/extentions/tooltip';
+import { FormComponent } from './form/form.component';
+import { ResultsComponent } from './results/results.component';
 
 
 @Component({
@@ -27,23 +27,28 @@ export class QueryComponent implements AfterViewInit, OnInit {
   results!: any;
   errorMessage: string | null = null;
 
-  @ViewChild('resultsTable') resultsTable!: ElementRef;
-
   constructor() {
     this.loading = false;
   }
 
   ngOnInit(): void {
-    this.queryText = Constants.INITIAL_QUERY;
-  }
+    const storedQueryText = localStorage.getItem('queryText');
+    const storedResults = localStorage.getItem('results');
 
+    this.queryText = storedQueryText ? storedQueryText : Constants.INITIAL_QUERY;
+
+    try {
+      this.results = storedResults ? JSON.parse(storedResults) : null;
+    } catch (e) {
+      console.error('Error parsing stored results:', e);
+      this.results = null; 
+    }
+    this.errorMessage = null; 
+  }
 
   ngAfterViewInit() {
     this.initializeEditor();
   }
-
-
-
 
   initializeEditor() {
 
@@ -73,6 +78,7 @@ export class QueryComponent implements AfterViewInit, OnInit {
             EditorView.updateListener.of(update => {
               if (update.changes) {
                 this.queryText = update.state.doc.toString();
+                localStorage.setItem('queryText', this.queryText);
               }
             })
           ],
@@ -95,11 +101,13 @@ export class QueryComponent implements AfterViewInit, OnInit {
     }
     console.log(this.results);
     this.errorMessage = null;
+    localStorage.setItem('results', JSON.stringify(this.results));
   }
 
   handleError(error: string) {
     this.errorMessage = error;
     this.results = null;
+    localStorage.removeItem('results');
   }
 
 }

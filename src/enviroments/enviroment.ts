@@ -1,5 +1,3 @@
-import { HttpHeaders } from "@angular/common/http";
-
 export const environment = {
     production: false,
     IMGPEDIA_API_URL: 'http://localhost:8080/api',
