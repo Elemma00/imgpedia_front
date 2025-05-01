@@ -19,17 +19,65 @@ export class Constants {
 
 
   /** ================================== IMGPEDIA =============================================== **/
+  
   static IMGPEDIA_URL = 'http://imgpedia.dcc.uchile.cl';
+  static IMGPEDIA_API_URL = 'http://192.80.24.199:8081/api';
 
-  static IMGPEDIA_URL_QUERY = Constants.IMGPEDIA_URL + '/sparql?default-graph-uri=&format=json&timeout=0&debug=on&query=';
+  // Endpoint para consultas SPARQL
+  static IMGPEDIA_SPARQL_ENDPOINT = Constants.IMGPEDIA_API_URL + '/sparql/query';
 
-  /* Need to replace 'XXXX' with a resource name like 'example.jpg' */
-  static IMGPEDIA_URL_IMAGE_DETAIL = Constants.IMGPEDIA_URL_QUERY + 'SELECT+%3Fsource+%3Fdbp+%3Fwiki+WHERE{%0D%0AVALUES+%3Fsource+{<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fresource%2FXXXX>}%0D%0AOPTIONAL{%0D%0A%3Fsource+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23associatedWith>+%3Fdbp+.%0D%0A%3Fsource+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23appearsIn>+%3Fwiki+.%0D%0A}%0D%0A}';
-  static IMGPEDIA_URL_IMAGE_BINDINGS = Constants.IMGPEDIA_URL_QUERY +  'SELECT+%3Fsource+%3Ftarget+%3Fdesc+%3Fdist+WHERE{%0D%0AVALUES+%3Fsource+{<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fresource%2FXXXX>}%0D%0A%3Frel+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23sourceImage>+%3Fsource+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23targetImage>+%3Ftarget+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23usesDescriptorType>+%3Fdesc+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23distance>+%3Fdist+.%0D%0A}';
+  // Las consultas ya no se realizan con parámetros en la URL, sino con un cuerpo JSON
+  // Esta constante se mantiene por compatibilidad, pero debe actualizarse su uso en la aplicación
+  static IMGPEDIA_URL_QUERY = Constants.IMGPEDIA_SPARQL_ENDPOINT;
 
-  /* Need to replace '%' with a resource name like 'example.jpg' */
+  // Recursos de ImgPedia
   static IMGPEDIA_URL_RESOURCE = Constants.IMGPEDIA_URL + '/resource/';
 
+/* Need to replace 'XXXX' with a resource name like 'example.jpg' */
+  static IMGPEDIA_QUERY_IMAGE_DETAIL = `
+  SELECT ?source ?dbp ?wiki WHERE {
+    VALUES ?source {<http://imgpedia.dcc.uchile.cl/resource/XXXX>}
+    OPTIONAL{
+      ?source <http://imgpedia.dcc.uchile.cl/ontology#associatedWith> ?dbp .
+      ?source <http://imgpedia.dcc.uchile.cl/ontology#appearsIn> ?wiki .
+    }
+  }`;
+
+  /* Consulta para obtener imágenes relacionadas (sin codificación URL) */
+  static IMGPEDIA_QUERY_IMAGE_BINDINGS = `
+  SELECT ?source ?target ?desc ?dist WHERE {
+    VALUES ?source {<http://imgpedia.dcc.uchile.cl/resource/XXXX>}
+    ?rel <http://imgpedia.dcc.uchile.cl/ontology#sourceImage> ?source ;
+        <http://imgpedia.dcc.uchile.cl/ontology#targetImage> ?target ;
+        <http://imgpedia.dcc.uchile.cl/ontology#usesDescriptorType> ?desc ;
+        <http://imgpedia.dcc.uchile.cl/ontology#distance> ?dist .
+  }`;
+
+
+  static IMGPEDIA_URL_IMAGE_DETAIL = Constants.IMGPEDIA_QUERY_IMAGE_DETAIL;
+  static IMGPEDIA_URL_IMAGE_BINDINGS = Constants.IMGPEDIA_QUERY_IMAGE_BINDINGS;
+
+  /* Cabecera para consultas SPARQL */
+  static SPARQL_HEADERS: HttpHeaders = new HttpHeaders({
+    'Content-Type': 'application/json'
+  });
+
+  /* Objeto de configuración para consultas SPARQL */
+  static SPARQL_CONFIG = {
+    format: 'json',
+    timeout: 0
+  };
+
+
+
+  // static IMGPEDIA_URL_QUERY = Constants.IMGPEDIA_URL + '/sparql?default-graph-uri=&format=json&timeout=0&debug=on&query=';
+
+  
+  // static IMGPEDIA_URL_IMAGE_DETAIL = Constants.IMGPEDIA_URL_QUERY + 'SELECT+%3Fsource+%3Fdbp+%3Fwiki+WHERE{%0D%0AVALUES+%3Fsource+{<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fresource%2FXXXX>}%0D%0AOPTIONAL{%0D%0A%3Fsource+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23associatedWith>+%3Fdbp+.%0D%0A%3Fsource+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23appearsIn>+%3Fwiki+.%0D%0A}%0D%0A}';
+  // static IMGPEDIA_URL_IMAGE_BINDINGS = Constants.IMGPEDIA_URL_QUERY +  'SELECT+%3Fsource+%3Ftarget+%3Fdesc+%3Fdist+WHERE{%0D%0AVALUES+%3Fsource+{<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fresource%2FXXXX>}%0D%0A%3Frel+<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23sourceImage>+%3Fsource+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23targetImage>+%3Ftarget+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23usesDescriptorType>+%3Fdesc+%3B%0D%0A++++<http%3A%2F%2Fimgpedia.dcc.uchile.cl%2Fontology%23distance>+%3Fdist+.%0D%0A}';
+
+  /* Need to replace '%' with a resource name like 'example.jpg' */
+ 
   static IMGPEDIA_PROP_APPEARS_IN = Constants.IMGPEDIA_URL + '/ontology#appearsIn';
   static IMGPEDIA_PROP_ASSOCIATED_WITH = Constants.IMGPEDIA_URL + '/ontology#associatedWith';
   static IMGPEDIA_PROP_HEIGHT = Constants.IMGPEDIA_URL + '/ontology#height';

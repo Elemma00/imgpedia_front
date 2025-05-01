@@ -7,10 +7,11 @@ import { ImageComponent } from './image/image.component';
 import { NullComponent } from './null/null.component';
 import { UrlComponent } from './url/url.component';
 import { ValComponent } from './val/val.component';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'visual-results',
-  imports: [MatGridListModule, CommonModule],
+  imports: [MatGridListModule, CommonModule, MatPaginatorModule],
   templateUrl: './visual-results.component.html',
   styleUrl: './visual-results.component.scss'
 })
@@ -20,6 +21,10 @@ export class VisualResultsComponent implements OnInit, OnChanges {
   columns!: any;
   colWidth!: string;
   headers: string[] = [];
+
+  pageIndex: number = 0;
+  pageSize: number = 50;
+  paginatedResults: any[] = [];
 
   private componentInstances: { [key: string]: any } = {};
 
@@ -32,7 +37,8 @@ export class VisualResultsComponent implements OnInit, OnChanges {
       if (this.headers.length > 0 && this.sparqlResult.results.bindings.length > 0) {
         this.columns = {};
         this.prepareColumns();
-        this.parseResult();
+        // this.parseResult();
+        this.updatePaginatedResults();
       }
     }
   }
@@ -102,5 +108,34 @@ export class VisualResultsComponent implements OnInit, OnChanges {
       this.componentInstances[key] = injector;
     }
     return this.componentInstances[key];
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePaginatedResults();
+  }
+
+  updatePaginatedResults(): void {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    
+    for (const key of this.headers) {
+      if (this.columns[key]) {
+        this.columns[key].values = [];
+      }
+    }
+    
+    const paginatedBindings = this.sparqlResult.results.bindings.slice(startIndex, endIndex);
+    
+    for (const binding of paginatedBindings) {
+      for (const key of this.headers) {
+        if (binding.hasOwnProperty(key)) {
+          this.columns[key].values.push(binding[key].value);
+        }
+      }
+    }
+    
+    this.componentInstances = {};
   }
 }

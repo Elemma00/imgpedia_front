@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { indentWithTab } from "@codemirror/commands";
-import { lintGutter } from "@codemirror/lint";
+import { linter, lintGutter } from "@codemirror/lint";
 import { search } from "@codemirror/search";
 import { EditorState } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
@@ -12,6 +12,7 @@ import { keywordCompletionSource, localCompletionSource } from '../../util/sparq
 import { wordHover } from '../../util/sparqlEditor/extentions/tooltip';
 import { FormComponent } from './form/form.component';
 import { ResultsComponent } from './results/results.component';
+import { sparqlLinter } from '../../util/sparqlEditor/extentions/sparql-linter';
 
 
 @Component({

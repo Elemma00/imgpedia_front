@@ -20,11 +20,13 @@ export class ImgpediaImagesService {
   }
 
   getImgInfo(fileName: string): Observable<ImgpediaDetailQueryResult> {
-    return this.http.get<ImgpediaDetailQueryResult>(Constants.IMGPEDIA_URL_IMAGE_DETAIL.replace('XXXX', fileName), {headers: Constants.CORS_HEADER});
+    // return this.http.get<ImgpediaDetailQueryResult>(Constants.IMGPEDIA_URL_IMAGE_DETAIL.replace('XXXX', fileName), {headers: Constants.CORS_HEADER});
+    return this.getImageDetails(fileName);
   }
 
   getImgBindings(fileName: string): Observable<ImgpediaBindingQueryResult> {
-    return this.http.get<ImgpediaBindingQueryResult>(Constants.IMGPEDIA_URL_IMAGE_BINDINGS.replace('XXXX',  fileName), {headers: Constants.CORS_HEADER});
+    // return this.http.get<ImgpediaBindingQueryResult>(Constants.IMGPEDIA_URL_IMAGE_BINDINGS.replace('XXXX',  fileName), {headers: Constants.CORS_HEADER});
+    return this.getRelatedImages(fileName);
   }
 
   getSimilarImgInfo(similars: string[], thumbWidht: number): Observable<WikiApiConsult> {
@@ -38,4 +40,26 @@ export class ImgpediaImagesService {
       {headers: Constants.CORS_HEADER});
   }
   
+  executeSparqlQuery(query: string): Observable<any> {
+    const requestBody = {
+      query: query,
+      format: Constants.SPARQL_CONFIG.format,
+      timeout: Constants.SPARQL_CONFIG.timeout
+    };
+    console.log('Executing SPARQL query:', requestBody);
+    console.log('SPARQL endpoint:', Constants.IMGPEDIA_SPARQL_ENDPOINT);
+    return this.http.post(Constants.IMGPEDIA_SPARQL_ENDPOINT, requestBody, {
+      headers: Constants.SPARQL_HEADERS
+    });
+  }
+
+  getImageDetails(imageId: string): Observable<any> {
+    const query = Constants.IMGPEDIA_QUERY_IMAGE_DETAIL.replace('XXXX', imageId);
+    return this.executeSparqlQuery(query);
+  }
+  
+  getRelatedImages(imageId: string): Observable<any> {
+    const query = Constants.IMGPEDIA_QUERY_IMAGE_BINDINGS.replace('XXXX', imageId);
+    return this.executeSparqlQuery(query);
+  }
 }

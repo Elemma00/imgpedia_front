@@ -16,6 +16,14 @@
   <div *ngFor="let k of columnsKeys()" class="columns" [ngStyle]="{'width': colWidth}">
     <ng-container *ngComponentOutlet="columns[k].cls; injector: createInjector(k)"></ng-container>
   </div>
+
+  <mat-paginator 
+    [length]="sparqlResult.results.bindings.length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [showFirstLastButtons]="true"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 } @else{
   <h4>No Results Found</h4>
 }

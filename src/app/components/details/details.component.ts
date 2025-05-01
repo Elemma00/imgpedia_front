@@ -33,8 +33,6 @@ export class DetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.detail = new ImgDetailInfo();
       this.detail.fileName = params['filename'].replace(/&/g, '%26');
-      this.similarsNames = DUMMY_SIMILARS_NAMES;
-      this.descriptors = DUMMY_DESCRIPTORS;
       this.getImg();
       this.getImgInfoAndBindings();
     });
@@ -118,6 +116,7 @@ export class DetailsComponent implements OnInit {
     }
   }
 
+  
   getImg(): void {
     this.http.getImgUrl(this.detail.fileName, 400).subscribe(
       res => {
@@ -136,52 +135,37 @@ export class DetailsComponent implements OnInit {
       }
     );
 
-    this.detail.associatedWith = DUMMY_IMG_DETAIL.associatedWith;
-    this.detail.appearsIn = DUMMY_IMG_DETAIL.appearsIn;
-
-    // TODO: descomentar esto cuando este implementado el servidor de imgpedia
-    // this.http.getImgInfo(this.detail.fileName).subscribe(
-    //   res => {
-    //     const results = res.results.bindings;
-    //     for (const key in results) {
-    //       if (results.hasOwnProperty(key)) {
-    //         const r = results[key];
-    //         if (r.dbp && r.dbp.value) {
-    //           this.detail.associatedWith.add(r.dbp.value);
-    //         }
-    //         if (r.wiki && r.wiki.value) {
-    //           this.detail.appearsIn.add(r.wiki.value);
-    //         }
-    //       }
-    //     }
-    //   }
-    // );
+    this.http.getImgInfo(this.detail.fileName).subscribe(
+      res => {
+        const results = res.results.bindings;
+        for (const key in results) {
+          if (results.hasOwnProperty(key)) {
+            const r = results[key];
+            if (r.dbp && r.dbp.value) {
+              this.detail.associatedWith.add(r.dbp.value);
+            }
+            if (r.wiki && r.wiki.value) {
+              this.detail.appearsIn.add(r.wiki.value);
+            }
+          }
+        }
+      }
+    );
   }
 
   getImgInfoAndBindings(): void {
-    // Usar datos dummy para los bindings
-    const bindings = DUMMY_BINDINGS;
-    if (bindings.length > 0) {
-      for (const key in bindings) {
-        if (bindings.hasOwnProperty(key)) {
-          this.addBinding(bindings[key]);
+    this.http.getImgBindings(this.detail.fileName).subscribe(
+      res => {
+        const bindings = res.results.bindings;
+        if (bindings.length > 0) {
+          for (const key in bindings) {
+            if (bindings.hasOwnProperty(key)) {
+              this.addBinding(bindings[key]);
+            }
+          }
+          this.getSimilarUrls(this.similarsNames);
         }
       }
-      this.getSimilarUrls(this.similarsNames);
-    }
-
-    // this.http.getImgBindings(this.detail.fileName).subscribe(
-    //   res => {
-    //     const bindings = res.results.bindings;
-    //     if (bindings.length > 0) {
-    //       for (const key in bindings) {
-    //         if (bindings.hasOwnProperty(key)) {
-    //           this.addBinding(bindings[key]);
-    //         }
-    //       }
-    //       this.getSimilarUrls(this.similarsNames);
-    //     }
-    //   }
-    // );
+    );
   }
 }
