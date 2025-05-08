@@ -1,25 +1,25 @@
-<nav class="navbar navbar-expand-lg bg-light fixed-top" data-bs-theme="light">
-  <div class="container">
-    <a class="navbar-brand" href="#">
-      <img src="img/imgpedia-min.png" alt="Imgpedia" style="height:50px" />
+<mat-toolbar color="primary" class="navbar-mat" style="position:fixed;top:0;width:100%;z-index:100;">
+  <div class="navbar-content">
+    <a class="navbar-brand" routerLink="/">
+      <img src="img/imgpedia-min.png" alt="Imgpedia" style="height:40px;vertical-align:middle;" />
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-      aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+    <nav class="nav-links desktop-nav">
+      <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a mat-button routerLink="/query" routerLinkActive="active-link">Query</a>
+      <a mat-button routerLink="/contact" routerLinkActive="active-link">Contact</a>
+
+    </nav>
+    <span class="spacer"></span>
+    <a mat-stroked-button routerLink="/login" routerLinkActive="active-link">Sign In</a>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn mobile-nav" aria-label="Menú">
+      <i class="bi bi-list"></i>
     </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/query']">Query</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</button>
+      <button mat-menu-item routerLink="/query" routerLinkActive="active-link">Query</button>
+      <button mat-menu-item routerLink="/contact" routerLinkActive="active-link">Contact</button>
+      <button mat-menu-item routerLink="/login" routerLinkActive="active-link">Login</button>
+    </mat-menu>
   </div>
-</nav>
+</mat-toolbar>
+<div style="height:64px"></div>

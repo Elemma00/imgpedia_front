@@ -1,0 +1,67 @@
+.navbar-mat {
+  background: linear-gradient(90deg, #64b8f4 0%, #2e29af 100%);
+  color: #fff;
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-right: 16px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      a {
+        color: #fff;
+        font-weight: 500;
+        &.active-link {
+          border-bottom: 2px solid #ffe066;
+        }
+      }
+    }
+    .spacer {
+      flex: 1 1 auto;
+    }
+    .menu-btn {
+      margin-left: 8px;
+      color: #fff;
+    }
+    // Responsive: oculta nav-links en móvil, muestra menú hamburguesa
+    .desktop-nav {
+      display: flex;
+    }
+    .mobile-nav {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+      .mobile-nav {
+        display: flex;
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  background: linear-gradient(90deg, #4da3df 0%, #2e29af 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 32px 0 rgba(77,163,223,0.15), 0 1.5px 6px 0 rgba(109,78,158,0.10) !important;
+}
+
+::ng-deep .mat-mdc-menu-content {
+  color: #fff !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  color: #fff !important;
+  transition: background 0.2s;
+}
+

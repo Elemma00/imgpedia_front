@@ -27,7 +27,6 @@ export class ResultsComponent implements OnInit, OnChanges{
   ngOnInit(): void {
     this.updatePaginatedResults();
     this.checkForImages();
-    this.scrollToResults();
   }
   
   ngOnChanges(changes: SimpleChanges): void {
@@ -35,7 +34,6 @@ export class ResultsComponent implements OnInit, OnChanges{
       this.resetState();
       this.updatePaginatedResults();
       this.checkForImages();
-      this.scrollToResults();
     }
   }
 
@@ -68,12 +66,6 @@ export class ResultsComponent implements OnInit, OnChanges{
     this.pageIndex = 0;
     this.paginatedResults = [];
     this.selectedView = 'visual';
-  }
-
-  private scrollToResults(): void {
-    setTimeout(() => {
-      this.resultsContainer.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 0);
   }
 
   private checkForImages(): void {
