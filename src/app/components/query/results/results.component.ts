@@ -18,6 +18,7 @@ export class ResultsComponent implements OnInit, OnChanges{
   pageIndex: number = 0;
   pageSize: number = 50;
   paginatedResults: any[] = [];
+  hasVisualResults!: boolean
 
   private imageExtensions = ['jpg', 'jpeg', 'png'];
 
@@ -76,19 +77,24 @@ export class ResultsComponent implements OnInit, OnChanges{
   }
 
   private checkForImages(): void {
+
+    this.hasVisualResults = false;
+    
     for (const row of this.sparqlResult.results.bindings) {
       for (const column of this.sparqlResult.head.vars) {
         const cellValue = row[column]?.value;
         if (cellValue && this.isUrl(cellValue)) {
           const extension = cellValue.split('.').pop()?.toLowerCase();
           if (extension && this.imageExtensions.includes(extension)) {
-            this.selectedView = 'visual'; 
-            return;
+            this.hasVisualResults = true;
+            break;
           }
         }
       }
+      if (this.hasVisualResults) break; 
     }
-    this.selectedView = 'table';
+    
+    this.selectedView = this.hasVisualResults ? 'visual' : 'table';
   }
   
 }

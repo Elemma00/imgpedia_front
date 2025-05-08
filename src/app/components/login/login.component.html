@@ -1,0 +1,50 @@
+<div class="login-bg">
+  <div class="login-card animated fadeInDown">
+    <div class="logo-container mb-3">
+      <img src="img/imgpedia-min.png" alt="IMGpedia" class="logo-img" />
+    </div>
+
+    @if(alertMessage){
+      <div class="alert animated fadeInDown"
+      [ngClass]="{'alert-success': alertType === 'success', 'alert-danger': alertType === 'danger'}"
+      role="alert" style="text-align:center;">
+      {{ alertMessage }}
+    </div>
+    }
+    
+    <h2 class="text-center mb-4" style="color:#6d4e9e;">Welcome to IMGpedia</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="form-group mb-3">
+        <label for="username" class="form-label">Username</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="bi bi-person-fill"></i></span>
+          <input id="username" type="text" class="form-control" formControlName="username" placeholder="Username here" [ngClass]="{'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched}">
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+          Username is required
+        </div>
+      </div>
+      <div class="form-group mb-4">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <span class="input-group-text bg-light"><i class="bi bi-lock-fill"></i></span>
+          <input id="password" [type]="hidePassword ? 'password' : 'text'" class="form-control" formControlName="password" placeholder="Password here" [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}">
+          <button type="button" class="btn btn-outline-secondary" (click)="hidePassword = !hidePassword" tabindex="-1">
+            <i class="bi" [ngClass]="hidePassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched">
+          Password is required
+        </div>
+        <div class="invalid-feedback d-block" *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched">
+          Password must be at least 6 characters long
+        </div>
+      </div>
+      <button type="submit" class="btn btn-login w-100" [disabled]="loginForm.invalid || isLoading">
+        <span *ngIf="!isLoading"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</span>
+        <span *ngIf="isLoading"><i class="bi bi-arrow-repeat spin"></i>Signing In...</span>
+      </button>
+    </form>
+    
+  </div>
+</div>

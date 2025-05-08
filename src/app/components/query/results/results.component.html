@@ -3,7 +3,7 @@
       <div  class="col">
         <div class="btn-group" role="group" aria-label="View selection">
           <button type="button" class="btn btn-success" [class.active]="selectedView === 'table'" (click)="setView('table')">Table</button>
-          <button type="button" class="btn btn-success" [class.active]="selectedView === 'visual'" (click)="setView('visual')">Visual Results</button>
+          <button type="button" [disabled]="!hasVisualResults" class="btn" [ngClass]="{'btn-secondary': !hasVisualResults, 'btn-success': hasVisualResults}" [class.active]="selectedView === 'visual'" (click)="setView('visual')">Visual Results</button>
         </div>
       </div>
     </div>
