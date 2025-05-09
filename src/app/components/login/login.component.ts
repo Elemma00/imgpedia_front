@@ -39,6 +39,10 @@ export class LoginComponent implements OnInit {
   ) {}
 
     ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/upload']);
+      return;
+    }
     this.initForm();
     }
 
@@ -64,11 +68,12 @@ export class LoginComponent implements OnInit {
         setTimeout(() => {
           this.alertMessage = null;
           this.router.navigate(['/upload']);
-        }, 1500);
+        }, 500);
       },
       error: (error) => {
         this.alertMessage = error.message || 'Incorrect credentials';
         this.alertType = 'danger';
+        this.isLoading = false;
         setTimeout(() => this.alertMessage = null, 2500);
       },
       complete: () => {

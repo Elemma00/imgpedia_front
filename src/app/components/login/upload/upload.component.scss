@@ -1,0 +1,161 @@
+.selected-files-container {
+  width: 100%;
+}
+
+.selected-files-list {
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.selected-file-item {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #dee2e6;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.file-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+  font-weight: 500;
+}
+
+.file-size {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.upload-mode {
+  transition: all 0.3s ease;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.status-badge {
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  
+  &.text-primary {
+    background-color: rgba(13, 110, 253, 0.1);
+  }
+  
+  &.text-success {
+    background-color: rgba(25, 135, 84, 0.1);
+  }
+  
+  &.text-danger {
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+}
+
+.timestamp {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.list-group-item {
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.progress {
+  border-radius: 1rem;
+  overflow: hidden;
+  background-color: #e9ecef;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.progress-bar-animated {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  0% { background-position-x: 1rem; }
+}
+
+.animated {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.fadeInDown {
+  animation-name: fadeInDown;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  padding: 2rem;
+  text-align: center;
+  transition: border 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  
+  &.dragover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+  
+  &.has-file {
+    background-color: rgba(25, 135, 84, 0.05);
+    border-color: #198754;
+  }
+  
+  .file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+  }
+  
+  .upload-icon {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+  }
+  
+  .browse-link {
+    color: #0d6efd;
+    text-decoration: underline;
+    cursor: pointer;
+    
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

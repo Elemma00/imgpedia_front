@@ -49,8 +49,23 @@ export class AuthService {
           this.currentUserSubject.next(user);
         }),
         catchError(error => {
-          console.error('Login error:', error);
-          return throwError(() => new Error(error.error?.message || 'Login failed'));
+         console.error('Login error:', error);
+        
+       
+        let errorMessage = 'Invalid username or password';
+        
+        if (error.error && typeof error.error === 'object') {
+         
+          if (error.error.error) {
+            errorMessage = error.error.error.includes('Bad credentials') 
+              ? 'Invalid username or password' 
+              : error.error.error;
+          } else if (error.error.message) {
+            errorMessage = error.error.message;
+          }
+        }
+        
+        return throwError(() => new Error(errorMessage));
         })
       );
   }

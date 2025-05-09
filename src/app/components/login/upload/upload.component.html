@@ -1,1 +1,161 @@
-<p>upload works!</p>
+<div class="container mt-4">
+  <div class="upload-container">
+    <h3 class="display-6">IMGpedia RDF Upload</h3>
+    
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title mb-0">Upload RDF files</h5>
+          <div class="upload-mode">
+            <span class="badge rounded-pill text-bg-{{ isMultipleMode ? 'primary' : 'secondary' }}">
+              {{ isMultipleMode ? 'Multiple files mode' : 'Single file mode' }}
+            </span>
+          </div>
+        </div>
+        <p class="card-text">Upload files in RDF, TTL or compressed TAR.GZ format to add them to the knowledge base.</p>
+        
+        <!-- Drag & Drop Area -->
+        <div 
+          class="dropzone" 
+          [class.dragover]="isDragging"
+          [class.has-file]="selectedFiles.length > 0"
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)" 
+          (drop)="onDrop($event)">
+          
+          <div class="dropzone-content">
+            @if(selectedFiles.length === 0) {
+              <div class="upload-icon">
+                <i class="bi bi-cloud-arrow-up-fill"></i>
+              </div>
+              <p>Drag your files here or 
+                <label for="file-input" class="browse-link">select files</label>
+              </p>
+              <p class="text-muted small">Allowed formats: .rdf, .ttl, .tar.gz</p>
+            } @else if(selectedFiles.length === 1) {
+              <div class="selected-file">
+                <i class="bi bi-file-earmark-text me-2"></i>
+                <span>{{ selectedFiles[0].name }}</span>
+                <span class="file-size">({{ (selectedFiles[0].size / 1024 / 1024).toFixed(2) }} MB)</span>
+                <button type="button" class="btn-close ms-2" (click)="clearFiles()"></button>
+              </div>
+            } @else {
+              <div class="selected-files-container">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>{{ selectedFiles.length }} files selected</span>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearFiles()">
+                    <i class="bi bi-trash me-1"></i>Clear All
+                  </button>
+                </div>
+                <ul class="selected-files-list">
+                  @for(file of selectedFiles; track file.name; let i = $index) {
+                    <li class="selected-file-item">
+                      <i class="bi bi-file-earmark-text me-2"></i>
+                      <span class="file-name">{{ file.name }}</span>
+                      <span class="file-size">({{ (file.size / 1024 / 1024).toFixed(2) }} MB)</span>
+                      <button type="button" class="btn-close ms-2" (click)="removeFile(i)"></button>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+          
+          <input 
+            type="file" 
+            id="file-input" 
+            class="file-input" 
+            (change)="onFileSelected($event)"
+            multiple
+            accept=".rdf,.ttl,.tar.gz">
+        </div>
+        
+        <!-- Error Message -->
+        @if(errorMessage) {
+          <div class="alert alert-danger mt-3 animated fadeInDown">
+            {{ errorMessage }}
+          </div>
+        }
+        
+        <!-- Success Message -->
+        @if(successMessage) {
+          <div class="alert alert-success mt-3 animated fadeInDown">
+            {{ successMessage }}
+          </div>
+        }
+        
+        <!-- Upload Progress -->
+        @if(uploading) {
+          <div class="progress mt-3">
+            <div 
+              class="progress-bar progress-bar-striped progress-bar-animated" 
+              [style.width.%]="uploadProgress">
+              {{ uploadProgress }}%
+            </div>
+          </div>
+        }
+        
+        <div class="mt-4">
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            (click)="onSubmit()" 
+            [disabled]="selectedFiles.length === 0 || uploading">
+            <i class="bi bi-upload me-2"></i>
+            {{ uploading ? 'Uploading...' : (isMultipleMode ? 'Upload files' : 'Upload file') }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Uploads -->
+    @if(uploadHistory.length > 0) {
+      <div class="card mt-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Upload History</h5>
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearHistory()">
+            <i class="bi bi-trash me-1"></i>Clear History
+          </button>
+        </div>
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            @for(upload of uploadHistory; track upload.id) {
+              <li class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <i class="bi bi-file-earmark-text me-2"></i>
+                    <span class="file-name">{{ upload.filename }}</span>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="timestamp text-muted small">{{ upload.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+                    <span [class]="getStatusClass(upload.status)" class="status-badge">
+                      @if(upload.status === 'processing') {
+                        <i class="bi bi-hourglass-split me-1"></i> Processing {{ upload.progress }}%
+                      } @else if(upload.status === 'completed') {
+                        <i class="bi bi-check-circle-fill me-1"></i> Completed
+                      } @else if(upload.status === 'failed') {
+                        <i class="bi bi-exclamation-circle-fill me-1"></i> Failed
+                      }
+                    </span>
+                  </div>
+                </div>
+                @if(upload.status === 'processing') {
+                  <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                         [style.width.%]="upload.progress"></div>
+                  </div>
+                } @else if(upload.status === 'completed') {
+                  <div class="progress mt-2" style="height: 6px;">
+                    <div class="progress-bar bg-success" style="width: 100%"></div>
+                  </div>
+                } @else if(upload.status === 'failed' && upload.message) {
+                  <p class="text-danger mb-0 small mt-1">Error: {{ upload.message }}</p>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+  </div>
+</div>
