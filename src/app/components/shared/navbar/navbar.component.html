@@ -4,21 +4,48 @@
       <img src="img/imgpedia-min.png" alt="Imgpedia" style="height:40px;vertical-align:middle;" />
     </a>
     <nav class="nav-links desktop-nav">
-      <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</a>
-      <a mat-button routerLink="/query" routerLinkActive="active-link">Query</a>
-      <a mat-button routerLink="/contact" routerLinkActive="active-link">Contact</a>
+      <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
+        <i class="bi bi-house-fill"></i>
+        Home
+      </a>
+      
+      <a mat-button routerLink="/query" routerLinkActive="active-link">
+        <i class="bi bi-text-indent-left"></i>
+        Query
+      </a>
+
+      <a mat-button routerLink="/contact" routerLinkActive="active-link">
+        <i class="bi bi-envelope-fill"></i>
+        Contact
+      </a>
 
     </nav>
     <span class="spacer"></span>
-    <a mat-stroked-button routerLink="/login" routerLinkActive="active-link">Sign In</a>
+    <a mat-stroked-button routerLink="/login" routerLinkActive="active-link">
+      <i class="bi bi-person-circle"></i>
+      Sign In
+    </a>
     <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn mobile-nav" aria-label="Menú">
       <i class="bi bi-list"></i>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</button>
-      <button mat-menu-item routerLink="/query" routerLinkActive="active-link">Query</button>
-      <button mat-menu-item routerLink="/contact" routerLinkActive="active-link">Contact</button>
-      <button mat-menu-item routerLink="/login" routerLinkActive="active-link">Login</button>
+      <button mat-menu-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">
+        <i class="bi bi-house-fill"></i>
+        Home
+      </button>
+
+      <button mat-menu-item routerLink="/query" routerLinkActive="active-link">
+        <i class="bi bi-text-indent-left"></i>
+        Query
+      </button>
+      <button mat-menu-item routerLink="/contact" routerLinkActive="active-link">
+        <i class="bi bi-envelope-fill"></i>
+        Contact
+      </button>
+      <button mat-menu-item routerLink="/login" routerLinkActive="active-link">
+        <i class="bi bi-person-circle"></i>
+        Sign In
+      </button>
     </mat-menu>
   </div>
 </mat-toolbar>

@@ -95,6 +95,8 @@ export class FormComponent implements OnInit {
       case 'xml':
       case 'csv':
       case 'tsv':
+      case 'ttl':
+      case 'nt':
         this.downloadFile(response, format);
         break;
       default:

@@ -1,18 +1,25 @@
 <form class="w-50" (ngSubmit)="runQuery(queryForm)" #queryForm="ngForm">
     <fieldset>
         <div class="my-3 d-flex align-items-center">
-            <label for="format" class="form-label me-2">Results Format</label>
+            <label for="format" class="form-label me-2">
+                Results Format
+                <i class="bi bi-file-earmark-arrow-down-fill"></i>
+            </label>
             <select class="form-select custom-border" name="format" id="format" [(ngModel)]="format"> 
                 <option value="json">NO FORMAT</option>
                 <option value="json">JSON</option>
                 <option value="xml">XML</option>
                 <option value="csv">CSV</option>
                 <option value="tsv">TSV</option>
+                <option value="ttl">TURTLE</option>
+                <option value="nt">NT</option>
             </select>
         </div>
 
         <div class="my-3 d-flex align-items-center">
-            <label for="timeout" class="form-label me-3">Execution Timeout (ms)</label>
+            <label for="timeout" class="form-label me-3">Execution Timeout (ms)
+                <i class="bi bi-clock-fill"></i>
+            </label>
             <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel" placeholder="Set Timeout Here (No timeout default)"/>
             <br />
         </div>
