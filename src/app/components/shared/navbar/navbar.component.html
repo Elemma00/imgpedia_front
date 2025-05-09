@@ -21,10 +21,22 @@
 
     </nav>
     <span class="spacer"></span>
-    <a mat-stroked-button routerLink="/login" routerLinkActive="active-link">
-      <i class="bi bi-person-circle"></i>
-      Sign In
-    </a>
+
+    @if(!currentUser){
+      <a mat-stroked-button routerLink="/login" routerLinkActive="active-link">
+        <i class="bi bi-person-circle"></i>
+        Sign In
+      </a>
+    }@else {
+        <span class="welcome-text">Hi, {{currentUser?.username}}</span>
+        <button mat-stroked-button class="logout-btn ms-2" (click)="logout()">
+          <i class="bi bi-box-arrow-right me-1"></i>
+          Logout
+        </button>
+    }
+
+
+  
     <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn mobile-nav" aria-label="Menú">
       <i class="bi bi-list"></i>
     </button>
@@ -42,10 +54,21 @@
         <i class="bi bi-envelope-fill"></i>
         Contact
       </button>
-      <button mat-menu-item routerLink="/login" routerLinkActive="active-link">
-        <i class="bi bi-person-circle"></i>
-        Sign In
-      </button>
+      @if(!currentUser){
+        <button mat-menu-item routerLink="/login" routerLinkActive="active-link">
+          <i class="bi bi-person-circle"></i>
+          Sign In
+        </button>
+      }@else{
+        <button mat-menu-item disabled>
+          <i class="bi bi-person-check-fill"></i>
+          Hi, {{currentUser?.username}}
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i>
+          Logout
+        </button>
+      }
     </mat-menu>
   </div>
 </mat-toolbar>

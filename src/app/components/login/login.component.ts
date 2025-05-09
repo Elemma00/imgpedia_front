@@ -7,9 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'login-view',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,13 +29,13 @@ export class LoginComponent implements OnInit {
   hidePassword = true;
   isLoading = false;
   
-  
   alertMessage: string | null = null;
   alertType: 'success' | 'danger' | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private authService: AuthService
   ) {}
 
     ngOnInit(): void {
@@ -41,10 +43,10 @@ export class LoginComponent implements OnInit {
     }
 
     initForm(): void {
-      this.loginForm = this.formBuilder.group({
-        username: ['', [Validators.required]],
-        password: ['', [Validators.required, Validators.minLength(6)]]
-      });
+        this.loginForm = this.formBuilder.group({
+          username: ['', [Validators.required]],
+          password: ['', [Validators.required]]
+        });
      }
 
     onSubmit(): void {
@@ -55,23 +57,23 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     const { username, password } = this.loginForm.value;
 
-    // Simulación de autenticación
-    setTimeout(() => {
-      if (username === 'admin' && password === 'password') {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('user', JSON.stringify({ username, role: 'ADMIN' }));
+    this.authService.login(username, password).subscribe({
+      next: (response) => {
         this.alertMessage = 'Successful sign in';
         this.alertType = 'success';
         setTimeout(() => {
           this.alertMessage = null;
-          this.router.navigate(['/']);
+          this.router.navigate(['/upload']);
         }, 1500);
-      } else {
-        this.alertMessage = 'Incorrect credentials';
+      },
+      error: (error) => {
+        this.alertMessage = error.message || 'Incorrect credentials';
         this.alertType = 'danger';
         setTimeout(() => this.alertMessage = null, 2500);
+      },
+      complete: () => {
+        this.isLoading = false;
       }
-      this.isLoading = false;
-    }, 1000);
+    });
   }
 }
