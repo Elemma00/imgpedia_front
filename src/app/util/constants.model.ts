@@ -1,4 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../enviroments/environment';
 
 export class Constants {
   /** ================================= VALUES ================================================= **/
@@ -21,7 +22,7 @@ export class Constants {
   /** ================================== IMGPEDIA =============================================== **/
   
   static IMGPEDIA_URL = 'http://imgpedia.dcc.uchile.cl';
-  static IMGPEDIA_API_URL = 'http://192.80.24.199:8081/api';
+  static IMGPEDIA_API_URL = environment.IMGPEDIA_API_URL;
 
   // Endpoint para consultas SPARQL
   static IMGPEDIA_SPARQL_ENDPOINT = Constants.IMGPEDIA_API_URL + '/sparql/query';

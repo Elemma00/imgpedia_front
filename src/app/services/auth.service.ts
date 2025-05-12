@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { environment } from '../../enviroments/enviroment';
+import { environment } from '../../enviroments/environment';
 
 interface User {
   username: string;
@@ -19,8 +19,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  // private apiUrl = environment.IMGPEDIA_API_URL + '/auth/login';
-  private apiUrl = 'http://localhost:8081/api/auth';
+  private apiUrl = environment.IMGPEDIA_API_URL + '/auth';
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
