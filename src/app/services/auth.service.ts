@@ -7,6 +7,7 @@ import { environment } from '../../enviroments/environment';
 interface User {
   username: string;
   token?: string;
+  roles: string[];
 }
 
 export interface LoginResponse {
@@ -39,9 +40,11 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { username, password })
       .pipe(
         tap(response => {
+          const decoded = this.decodeToken(response.token);
           const user = {
             username: response.username,
-            token: response.token
+            token: response.token,
+            roles: decoded?.roles || decoded?.role || []
           };
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('user', JSON.stringify(user));
@@ -79,4 +82,13 @@ export class AuthService {
   isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
+
+  private decodeToken(token: string): any {
+  try {
+    const payload = token.split('.')[1];
+    return JSON.parse(atob(payload));
+  } catch (e) {
+    return null;
+  }
+}
 }

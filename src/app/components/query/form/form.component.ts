@@ -42,7 +42,6 @@ export class FormComponent implements OnInit {
         timeout: this.timeout
       };
 
-      console.log(queryDTO);
       // let response = DUMMY_SPARQL_RESULT;
       // this.resultsEmitter.emit(response);
       // this.loading = false;

@@ -19,6 +19,18 @@
         Contact
       </a>
 
+      @if(currentUser){
+        <a mat-button routerLink="/upload" routerLinkActive="active-link">
+          <i class="bi bi-upload"></i>
+          Upload
+        </a>
+      }
+      @if(currentUser && (currentUser.roles?.includes('ROLE_ADMIN') || currentUser.roles?.includes('ROLE_SUPERADMIN'))){
+      <a mat-button routerLink="/admin" routerLinkActive="active-link">
+        <i class="bi bi-people"></i>
+        Admin
+      </a>
+      }
     </nav>
     <span class="spacer"></span>
 
@@ -34,8 +46,6 @@
           Logout
         </button>
     }
-
-
   
     <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn mobile-nav" aria-label="Menú">
       <i class="bi bi-list"></i>
@@ -54,6 +64,14 @@
         <i class="bi bi-envelope-fill"></i>
         Contact
       </button>
+
+      @if(currentUser){
+        <button mat-menu-item routerLink="/upload" routerLinkActive="active-link">
+          <i class="bi bi-upload"></i>
+          Upload
+        </button>
+      }
+
       @if(!currentUser){
         <button mat-menu-item routerLink="/login" routerLinkActive="active-link">
           <i class="bi bi-person-circle"></i>

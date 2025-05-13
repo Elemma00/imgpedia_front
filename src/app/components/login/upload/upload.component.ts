@@ -549,6 +549,51 @@ export class UploadComponent implements OnInit, OnDestroy {
     }
   }
 
+  refreshHistory(): void {
+    if (this.uploadHistory.length === 0) return;
+
+    // Refresca el estado de cada archivo en el historial usando su uploadId
+    this.uploadHistory.forEach(upload => {
+      this.http.get<any>(`${this.API_URL}/status?uploadId=${upload.id}`)
+        .subscribe({
+          next: (response: any) => {
+            this.updateUploadStatus(upload.id, response);
+          },
+          error: (err) => {
+            // Si hay error, puedes marcar como failed o dejar el estado igual
+            this.updateUploadStatus(upload.id, {
+              status: 'failed',
+              message: 'Failed to retrieve status'
+            });
+          }
+        });
+    });
+  }
+
+  cancelUpload(uploadId: string): void {
+    const user = this.authService.currentUserValue;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${user?.token}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+    const body = new URLSearchParams();
+    body.set('uploadId', uploadId);
+
+    this.http.post(`${this.API_URL}/cancelUpload`, body.toString(), { headers })
+      .subscribe({
+        next: () => {
+          this.successMessage = 'Upload cancelled successfully';
+          // Optionally update status in history
+          this.updateUploadStatus(uploadId, { status: 'failed', message: 'Cancelled by user' });
+          setTimeout(() => this.successMessage = null, 3000);
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'Error cancelling upload';
+          setTimeout(() => this.errorMessage = null, 3000);
+        }
+      });
+  }
+
   ngOnDestroy(): void {
     this.stopStatusTracking();
   }
