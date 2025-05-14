@@ -51,24 +51,31 @@ export class AuthService {
           this.currentUserSubject.next(user);
         }),
         catchError(error => {
-         console.error('Login error:', error);
-        
-       
-        let errorMessage = 'Invalid username or password';
-        
-        if (error.error && typeof error.error === 'object') {
-         
-          if (error.error.error) {
-            errorMessage = error.error.error.includes('Bad credentials') 
-              ? 'Invalid username or password' 
-              : error.error.error;
-          } else if (error.error.message) {
-            errorMessage = error.error.message;
-          }
-        }
-        
-        return throwError(() => new Error(errorMessage));
-        })
+            console.error('Login error:', error);
+            if (error.status === 0) {
+              return throwError(() => ({
+                status: 0,
+                message: 'Authentication service is not responding. Please try again later.'
+              }));
+            }
+            
+            let errorMessage = 'Invalid username or password';
+            
+            if (error.error && typeof error.error === 'object') {
+              if (error.error.error) {
+                errorMessage = error.error.error.includes('Bad credentials') 
+                  ? 'Invalid username or password' 
+                  : error.error.error;
+              } else if (error.error.message) {
+                errorMessage = error.error.message;
+              }
+            }
+            
+            return throwError(() => ({
+              status: error.status,
+              message: errorMessage
+            }));
+          })
       );
   }
 
