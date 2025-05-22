@@ -10,6 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../enviroments/environment';
 
 interface UploadStatus {
   id: string;
@@ -48,7 +49,7 @@ export class UploadComponent implements OnInit, OnDestroy {
   statusCheckInterval: any;
   pollingActive = false;
   
-  readonly API_URL = 'http://localhost:8081/api/data';
+  readonly API_URL = environment.IMGPEDIA_API_URL + '/data';
   readonly ALLOWED_TYPES = ['.rdf', '.ttl', '.gz'];
 
   constructor(

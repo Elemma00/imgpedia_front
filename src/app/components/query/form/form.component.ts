@@ -21,11 +21,10 @@ export class FormComponent implements OnInit {
   @Output() stopEmitter = new EventEmitter();
   @Output() errorEmitter = new EventEmitter<string>();
 
-
   format: string = 'json';
   timeout: number = 0;
+  clientQueryId: string = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   private querySubscription!: Subscription;
-
 
   constructor(private imgpediaService: ImgpediaService) { }
 
@@ -39,12 +38,14 @@ export class FormComponent implements OnInit {
       const queryDTO: SparqlQueryDTO = {
         query: this.queryText,
         format: this.format,
-        timeout: this.timeout
+        timeout: this.timeout,
+        clientQueryId: this.clientQueryId
       };
 
       // let response = DUMMY_SPARQL_RESULT;
       // this.resultsEmitter.emit(response);
       // this.loading = false;
+      // this.errorEmitter.emit("");
       this.querySubscription = this.imgpediaService.runQuery(queryDTO)
         .pipe(
           this.timeout > 0 ? timeout(this.timeout) : source => source,
@@ -74,7 +75,7 @@ export class FormComponent implements OnInit {
     if (this.querySubscription) {
       this.querySubscription.unsubscribe();
       this.loading = false;
-      this.imgpediaService.stopQuery().subscribe({
+      this.imgpediaService.stopQuery(this.clientQueryId).subscribe({
         next: response => console.log(response),
         error: error => console.error('Error stop:', error)
       });

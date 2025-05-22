@@ -34,7 +34,8 @@ export class ImageComponent implements OnInit {
       for (const v in this.values) {
         if (this.values.hasOwnProperty(v)) {
           const s = this.values[v].split('/');
-          const filename = s[s.length - 1];
+          let filename = s[s.length - 1];
+          filename = decodeURIComponent(filename);
           let i;
           if ((i = filename.indexOf('File:')) === 0) {
             this._fileNames.push(filename.substr(5));

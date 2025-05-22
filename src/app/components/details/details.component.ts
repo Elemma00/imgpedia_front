@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { DUMMY_BINDINGS, DUMMY_DESCRIPTORS, DUMMY_IMG_DETAIL, DUMMY_SIMILARS_NAMES } from '../../util/dummy-data';
+import { ImgpediaService } from '../../services/imgpedia.service';
 
 @Component({
   selector: 'app-details',
@@ -30,9 +31,12 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.descriptors = {};
+    this.similarsNames = [];
     this.route.params.subscribe(params => {
       this.detail = new ImgDetailInfo();
       this.detail.fileName = params['filename'].replace(/&/g, '%26');
+      this.detail.fileName = decodeURIComponent(this.detail.fileName);
       this.getImg();
       this.getImgInfoAndBindings();
     });
@@ -74,10 +78,11 @@ export class DetailsComponent implements OnInit {
   addBindingUrl(page: Page, key: number): void {
     let i: number;
     const title: string = Constants.IMGPEDIA_URL_RESOURCE + page.title.split(':')[1].replace(/ /g, '_');
+    let encodedTitle = this.http.normalizeUri(title);
     for (const desc in this.descriptors) {
       if (this.descriptors.hasOwnProperty(desc)) {
         for (i = 0; i < this.descriptors[desc].length; i++) {
-          if (this.descriptors[desc][i].fileNameUrl === title) {
+          if (this.descriptors[desc][i].fileNameUrl === encodedTitle) {
             if (key >= 0) {
               this.descriptors[desc][i].thumbUrl = page.imageinfo[0].thumburl;
             } else {

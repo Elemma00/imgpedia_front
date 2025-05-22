@@ -7,8 +7,8 @@ export class Constants {
   static MAX_WIKI_REQUEST = 10;
   static QUERY_RESULT_ROW_HEIGHT ='200px';
 
-  static IMG_MISSING_URL = 'assets/img/missing-min.png';
-  static IMG_MISSING_BIG_URL = 'assets/img/missing.png';
+  static IMG_MISSING_URL = '/img/missing-min.png';
+  static IMG_MISSING_BIG_URL = '/img/missing.png';
 
 
   /** ================================= WIKIMEDIA =============================================== **/
