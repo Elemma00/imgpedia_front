@@ -36,7 +36,10 @@
       <mat-tab-group>
         @for (desc of getDescriptors(); track $index) {
           <mat-tab label={{formatDescriptorName(desc)}}>
-            <mat-grid-list class="similar-grid" cols="3" rowHeight="6:3" gutterSize="15px">
+          <mat-grid-list class="similar-grid"
+               [cols]="getSimilarCols()"
+               rowHeight="6:3"
+               gutterSize="15px">
               @for (sim of descriptors[desc]; track $index) {
                 <mat-grid-tile>
                   <a [routerLink]="['/detail', sim.fileName]" class="binding">

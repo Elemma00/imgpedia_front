@@ -109,7 +109,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   getSimilarUrls(similars: string[]): void {
     for (let i = 0, j = similars.length; i < j; i += Constants.MAX_WIKI_REQUEST) {
-      this.http.getSimilarImgInfo(similars.slice(i, i + Constants.MAX_WIKI_REQUEST), window.screen.width / 4)
+      this.http.getSimilarImgInfo(similars.slice(i, i + Constants.MAX_WIKI_REQUEST), this.getSimilarImageSize())
         .subscribe(res => {
           const pages = res.query.pages;
           // console.log('Retrieved similar image URLs:', pages);
@@ -246,10 +246,18 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   scrollToLinks() {
-  const section = document.querySelector('.links-section');
-  if (section) {
-    section.scrollIntoView({ behavior: 'smooth' });
+    const section = document.querySelector('.links-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   }
-}
+
+  getSimilarCols(): number {
+    return window.innerWidth < 600 ? 2 : 3;
+  }
+
+  getSimilarImageSize(): number {
+    return window.innerWidth < 600 ? 120 : 200;
+  }
 }
 
