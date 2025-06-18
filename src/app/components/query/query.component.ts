@@ -99,7 +99,6 @@ export class QueryComponent implements AfterViewInit, OnInit {
       console.warn('Received data is not valid JSON, using raw data');
       this.results = $event;
     }
-    console.log(this.results);
     this.errorMessage = null;
     localStorage.setItem('results', JSON.stringify(this.results));
   }

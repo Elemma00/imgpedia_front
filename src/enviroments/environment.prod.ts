@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    IMGPEDIA_API_URL: 'http://192.80.24.199:8081/api',
-    IMGPEDIA_API_QUERY_URL: 'http://192.80.24.199:8081/api/sparql/query',
-    IMGPEDIA_API_ADMIN_URL: 'http://192.80.24.199:8081/api/admin',
+    IMGPEDIA_API_URL: 'https://imgpedia.dcc.uchile.cl/api',
+    IMGPEDIA_API_QUERY_URL: 'https://imgpedia.dcc.uchile.cl/api/sparql/query',
+    IMGPEDIA_API_ADMIN_URL: 'https://imgpedia.dcc.uchile.cl/api/admin',
   };

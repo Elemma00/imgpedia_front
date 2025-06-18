@@ -6,7 +6,10 @@
                     @if (t) {
                         <div class="card">
                             <a [routerLink]="['/detail', t.fileName]">
-                                <img [src]="t.thumb" class="card-img" />
+                               <img [src]="t.thumb"
+                                class="card-img"
+                                [ngClass]="{'img-fade-in': loaded[$index]}"
+                                (load)="onImgLoad($index)" />
                             </a>
                         </div>
                     }

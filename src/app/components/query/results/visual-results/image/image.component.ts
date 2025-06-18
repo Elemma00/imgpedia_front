@@ -6,10 +6,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'image',
-  imports: [MatGridListModule, MatCardModule, MatProgressSpinnerModule, RouterModule],
+  imports: [MatGridListModule, MatCardModule, MatProgressSpinnerModule, RouterModule, CommonModule],
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
@@ -19,6 +20,8 @@ export class ImageComponent implements OnInit {
   private isInitialized = false;
 
   private _fileNames: Array<string> = [];
+
+  loaded: boolean[] = [];
 
   constructor(
     private http: ImgpediaImagesService,
@@ -48,6 +51,10 @@ export class ImageComponent implements OnInit {
     }
   }
 
+  onImgLoad(index: number) {
+    this.loaded[index] = true;
+  }
+  
   cleanValues() {
     for (const v in this.values) {
       if (this.values.hasOwnProperty(v)) {

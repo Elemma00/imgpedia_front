@@ -55,3 +55,14 @@
     display: grid;
     gap: 16px; /* Espacio entre las cards */
 }
+
+.img-fade-in {
+  opacity: 0;
+  animation: fadeInImg 0.7s ease forwards;
+}
+
+@keyframes fadeInImg {
+  to {
+    opacity: 1;
+  }
+}

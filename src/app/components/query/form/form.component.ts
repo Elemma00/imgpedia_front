@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { catchError, Subscription, throwError, timeout } from 'rxjs';
+import { catchError, Subject, Subscription, takeUntil, throwError, timeout } from 'rxjs';
 import { SparqlQueryDTO } from '../../../models/SparqlQueryDTO';
 import { ImgpediaService } from '../../../services/imgpedia.service';
 import { DUMMY_SPARQL_RESULT } from '../../../util/dummy-data';
@@ -12,7 +12,7 @@ import { DUMMY_SPARQL_RESULT } from '../../../util/dummy-data';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
-export class FormComponent implements OnInit {
+export class FormComponent implements OnInit, OnDestroy {
 
   @Input() queryText!: string;
   @Input() loading!: boolean;
@@ -25,10 +25,17 @@ export class FormComponent implements OnInit {
   timeout: number = 0;
   clientQueryId: string = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   private querySubscription!: Subscription;
+  private destroy$ = new Subject<void>();
 
   constructor(private imgpediaService: ImgpediaService) { }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.stop();
+    this.destroy$.next();
+    this.destroy$.complete(); 
   }
 
   runQuery(queryForm: NgForm) {
@@ -46,19 +53,26 @@ export class FormComponent implements OnInit {
       // this.resultsEmitter.emit(response);
       // this.loading = false;
       // this.errorEmitter.emit("");
-      this.querySubscription = this.imgpediaService.runQuery(queryDTO)
+      let query$ = this.imgpediaService.runQuery(queryDTO).pipe(
+        takeUntil(this.destroy$)
+      );
+
+      if (this.timeout > 0) {
+        query$ = query$.pipe(timeout(this.timeout));
+      }
+
+      this.querySubscription = query$
         .pipe(
-          this.timeout > 0 ? timeout(this.timeout) : source => source,
           catchError(error => {
             if (error.name === 'TimeoutError') {
               console.error('Query timeout:', error);
               this.stop();
-            } else if (error.message.includes('ERR_CONNECTION_REFUSED')) {
+            } else if (error.message && error.message.includes('ERR_CONNECTION_REFUSED')) {
               console.error('Connection error:', error);
               this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
             } else {
               console.error(error.error);
-              this.errorEmitter.emit(error.error);
+              this.errorEmitter.emit("IMGpedia services are not responding. Please try again later.");
             }
             this.loading = false;
             return throwError(() => new Error(error));
@@ -86,6 +100,8 @@ export class FormComponent implements OnInit {
     this.stop();
     window.location.reload();
   }
+
+  
 
   formatHandler(response: any, format: string) {
     switch (format) {

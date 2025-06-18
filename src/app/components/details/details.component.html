@@ -1,58 +1,99 @@
 <div class="details container">
-    <mat-toolbar color="primary" class="banner">
-        <strong class="filename">{{parseText(detail.fileName)}}</strong>
-      </mat-toolbar>
-      <br>
+  <mat-toolbar color="primary" class="banner">
+    <strong class="filename" style="font-size: 1.5rem;">{{parseText(detail.fileName)}}</strong>
+  </mat-toolbar>
+  <br>
+
+  <div class="details-main">
+    <!-- MAIN IMAGE LEFTSIDE-->
+     
+    <div class="left-panel">
       <mat-card class="main-card">
-        <a [href]=detail.originalUrl><img mat-card-image [src]=detail.thumbUrl></a>
+        <a [href]=detail.originalUrl>
+          <span class="instant-photo">
+            <img mat-card-image [src]=detail.thumbUrl>
+          </span>
+        </a>
         <mat-card-content>
           <p><b>File: </b>{{parseText(detail.fileName)}}</p>
-      
           @if (detail.height) {
-              <p><b>Height:</b>{{detail.height}}</p>
+            <p><b>Height:</b> {{detail.height}}</p>
           }
-          
-          @if (associatedWith().length > 0) {
-            <div>
-                <b>Associated with</b>
-                <div class="links">
-                @for (associated of associatedWith(); track $index) {
-                    <a [href]=associated>{{parseText(associated)}}</a>
-                }
-                </div>
-            </div>
-          }
-        
-          @if(appearsIn().length > 0){
-              <div>
-                <b>Appears in</b>
-                <div class="links">
-                @for (appear of appearsIn(); track $index) {
-                    <a [href]=appear>{{parseText(appear)}}</a>
-                }
-                </div>
-              </div>
-          }
-      
         </mat-card-content>
       </mat-card>
-      
+        @if (associatedWith().length > 0 || appearsIn().length > 0) {
+        <div class="links-indicator">
+          <span style="cursor:pointer;" (click)="scrollToLinks()">
+            ▼ More Info Below ▼
+          </span>
+        </div>
+      }
+    </div>
+
+    <!-- SIMILARS IMAGES RIGHTSIDE -->
+    <div class="right-panel">
+      <div class="similar-title">Similar Images</div>
       <mat-tab-group>
         @for (desc of getDescriptors(); track $index) {
-            <mat-tab label={{formatDescriptorName(desc)}}>
-              <mat-grid-list cols="6" rowHeight="6:3" gutterSize="15px">
-                @for (sim of descriptors[desc]; track $index) {
-                    <mat-grid-tile>
-                      <a [routerLink]="['/detail', sim.fileName]" class="binding"><img [src]="sim.thumbUrl"
-                                                                                       [alt]="sim.distance"></a>
-                      <mat-grid-tile-footer class="distance-descriptor">
-                        <p>{{sim.distance}}</p>
-                      </mat-grid-tile-footer>
-                    </mat-grid-tile>
-                }
-              </mat-grid-list>
-            </mat-tab>
+          <mat-tab label={{formatDescriptorName(desc)}}>
+            <mat-grid-list class="similar-grid" cols="3" rowHeight="6:3" gutterSize="15px">
+              @for (sim of descriptors[desc]; track $index) {
+                <mat-grid-tile>
+                  <a [routerLink]="['/detail', sim.fileName]" class="binding">
+                    <img [src]="sim.thumbUrl" [alt]="sim.distance" class="img-animated">
+                  </a>
+                  <mat-grid-tile-footer class="distance-descriptor">
+                    <p>{{sim.distance}}</p>
+                  </mat-grid-tile-footer>
+                </mat-grid-tile>
+              }
+            </mat-grid-list>
+          </mat-tab>
         }
-      
       </mat-tab-group>
+    </div>
+  </div>
+
+  <!-- LINKS DOWNSIDE -->
+    <div class="links-section">
+    @if (associatedWith().length > 0) {
+      <div class="associated">
+        <b>Associated with</b>
+        <div class="links">
+          <ul>
+            @for (associated of associatedWithVisible; track $index) {
+              <li>
+                <a [href]="associated" target="_blank" rel="noopener">{{parseText(associated)}}</a>
+              </li>
+            }
+          </ul>
+          @if (associatedWith().length > associatedWithMax) {
+            <button (click)="associatedWithFolded = !associatedWithFolded" class="btn btn-success" style="padding:0;">
+              {{ associatedWithFolded ? 'Show More' : 'Show Less' }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if(appearsIn().length > 0){
+      <div class="appears-in">
+        <b>Appears in</b>
+        <div class="links">
+          <ul>
+            @for (appear of appearsInVisible; track $index) {
+              <li>
+                <a [href]="appear" target="_blank" rel="noopener">{{parseText(appear)}}</a>
+              </li>
+            }
+          </ul>
+          @if (appearsIn().length > appearsInMax) {
+            <button (click)="appearsInFolded = !appearsInFolded" class="btn btn-success" style="padding:0;">
+              {{ appearsInFolded ? 'Show More' : 'Show Less' }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
 </div>

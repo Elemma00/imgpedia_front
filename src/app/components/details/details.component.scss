@@ -1,58 +1,108 @@
 .details {
-    margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.banner {
-    height: 50px;
-    color: #87CEEB;
-  
-    a {
-      height: inherit;
-      margin-right: 2%;
-      margin-top: 20px;
-      margin-bottom: 15px;
-  
-      .logo {
-        height: 90%;
-      }
-    }
-  
-    .filename {
-      text-align: center;
-      text-overflow: ellipsis
-    }
+.details-main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: 1200px;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.left-panel {
+  flex: 1 1 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.right-panel {
+  flex: 2 1 600px;
+  background: #fafbfc;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  min-width: 350px;
+}
+
+.similar-title {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.similar-grid {
+  width: 100%;
+}
+
+.links-section {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  padding: 1.5rem 2rem;
+}
+
+.links-indicator {
+  text-align: center;
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+  .details-main {
+    flex-direction: column;
+    align-items: center;
   }
-  
-  .main-card {
-    width: 50%;
-    margin-left: 25%;
-  
-    img {
-      max-width: 400px;
-      max-height: 400px;
-      height: auto;
-      width: auto;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  
-    .links {
-      text-overflow: ellipsis;
-    }
+  .right-panel, .left-panel {
+    width: 100%;
+    min-width: unset;
   }
+  .links-section {
+    padding: 1rem;
+  }
+}
   
-  .distance-descriptor {
-    visibility: hidden;
+  .img-animated {
     opacity: 0;
-    transition: all 0.3s linear;
-    word-wrap: break-word;
+    transform: scale(0.95);
+    animation: fadeInZoom 0.8s ease-out forwards;
   }
-  
-  .binding:hover + .distance-descriptor {
-    opacity: 1;
-    transition: all 0.3s linear;
-    visibility: visible;
+
+  @keyframes fadeInZoom {
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
-  
-  
+
+  .associated {
+    margin-bottom: 5px;
+  }
+
+  .instant-photo {
+  background: #fff;
+  padding: 16px 16px 40px 16px; /* más espacio abajo */
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18), 0 1.5px 4px rgba(0,0,0,0.15);
+  display: inline-block;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 24px;
+}
+
+.instant-photo img {
+  display: block;
+  max-width: 100%;
+  border-radius: 4px;
+  box-shadow: none;
+  margin: 0 auto;
+}

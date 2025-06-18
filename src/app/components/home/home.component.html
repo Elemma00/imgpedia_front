@@ -48,37 +48,42 @@
 </header>
 
 <section>
-    <div class="container">
-        <h2>IMGpedia</h2>
-        <p><strong>IMGpedia</strong> is a Linked Dataset that incorporates visual information of the images from the
-            Wikimedia Commons dataset: it brings together descriptors of the visual content of 15 million images, 450
-            million visual-similarity relations between those images, links to image metadata from DBpedia Commons, and
-            links to the DBpedia resources associated with individual images. It allows people to perform
-            <em>visuo-semantic</em> queries over the images.</p>
-        <p>To explore the data, you may click any of the images or you can follow these links:</p>
-        <ul>
-            <li><a href="http://imgpedia.dcc.uchile.cl/detail/All_Gizah_Pyramids.jpg">Interactive Browser (click an
-                    example above to start)</a></li>
-            <li><a [routerLink]="['/query']">SPARQL Endpoint</a></li>
-            <li><a href="http://imgpedia.dcc.uchile.cl/dumps">IMGpedia RDF Dumps</a></li>
-            <li><a href="http://imgpedia.dcc.uchile.cl/ontology">IMGpedia Ontology</a></li>
-            <li><a href="https://github.com/scferrada/imgpedia/issues">GitHub Issue Tracker</a></li>
-            <li><a href="https://github.com/scferrada/imgpedia">GitHub Repository</a></li>
-        </ul>
-        <p>If you are using any parts of <strong>IMGpedia</strong>: code, RDF dumps or the SPARQL endpoint in your
-            research, please cite the <a href="http://scferrada.github.io/pdf/imgpediaISWC17.pdf">following paper</a>
-            where we describe the dataset:</p>
-        <ul>
-            <li>Sebastián Ferrada, Benjamin Bustos and Aidan Hogan. <em>“IMGpedia: a Linked Dataset with Content-based
-                    Analysis of Wikimedia Images”</em>. In the Proceedings of the <em>16th International Semantic Web
-                    Conference</em>, 2017.</li>
-        </ul>
+  <div class="container">
+    <h2>IMGpedia</h2>
+    <p><strong>IMGpedia</strong> is a Linked Dataset that incorporates visual information of the images from the
+      Wikimedia Commons dataset: it brings together descriptors of the visual content of 15 million images, 450
+      million visual-similarity relations between those images, links to image metadata from DBpedia Commons, and
+      links to the DBpedia resources associated with individual images. It allows people to perform
+      <em>visuo-semantic</em> queries over the images.</p>
+    <div class="text-center my-4">
+      <a [routerLink]="['/query']" class="btn btn-lg btn-primary fw-bold shadow-lg px-5 py-3" style="font-size: 1.5rem;">
+        Try it now!
+      </a>
     </div>
+    <p>To explore the data, you may click any of the images or you can follow these links:</p>
+    <ul>
+      <li><a [routerLink]="['/detail/All_Gizah_Pyramids.jpg']"c>Interactive Browser (click an
+          example above to start)</a></li>
+      <li><a [routerLink]="['/query']">SPARQL Endpoint</a></li>
+      <li><a href="http://imgpedia.dcc.uchile.cl/dumps">IMGpedia RDF Dumps</a></li>
+      <li><a [routerLink]="['/ontology']">IMGpedia Ontology</a></li>
+      <li><a href="https://github.com/scferrada/imgpedia/issues">GitHub Issue Tracker</a></li>
+      <li><a href="https://github.com/scferrada/imgpedia">GitHub Repository</a></li>
+    </ul>
+    <p>If you are using any parts of <strong>IMGpedia</strong>: code, RDF dumps or the SPARQL endpoint in your
+      research, please cite the <a href="http://scferrada.github.io/pdf/imgpediaISWC17.pdf">following paper</a>
+      where we describe the dataset:</p>
+    <ul>
+      <li>Sebastián Ferrada, Benjamin Bustos and Aidan Hogan. <em>“IMGpedia: a Linked Dataset with Content-based
+          Analysis of Wikimedia Images”</em>. In the Proceedings of the <em>16th International Semantic Web
+          Conference</em>, 2017.</li>
+    </ul>
+  </div>
 </section>
 
 <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">IMGpedia by <a href="http://scferrada.github.io">Sebastián Ferrada</a>, <a href="http://users.dcc.uchile.cl/~bebustos">Benjamín Bustos</a>, <a href="http://aidanhogan.com">Aidan Hogan</a> and Nicolás Bravo is made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>.<br>
+      <p class="m-0 text-center text-white">IMGpedia by <a href="http://scferrada.github.io">Sebastián Ferrada</a>, <a href="http://users.dcc.uchile.cl/~bebustos">Benjamín Bustos</a>, <a href="http://aidanhogan.com">Aidan Hogan</a>, <a href="https://github.com/Elemma00">Emmanuel Faúndez</a> and Nicolás Bravo is made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>.<br>
 Any rights in individual contents of the database are licensed under the <a href="http://opendatacommons.org/licenses/dbcl/1.0/">Database Contents License</a>.</p>
     </div>
     <!-- /.container -->
