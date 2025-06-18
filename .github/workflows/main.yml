@@ -35,4 +35,4 @@ jobs:
 
       - name: Deploy frontend via rsync
         run: |
-          rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/browser/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/efaundez/imgpedia_front/browser/
+          rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/imgpedia_front/browser/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/efaundez/imgpedia_front/browser/
