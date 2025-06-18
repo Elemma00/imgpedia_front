@@ -1,4 +1,4 @@
-name: Deploy on Push
+name: Build and Deploy ImgPedia Frontend
 
 on:
   push:
@@ -6,34 +6,33 @@ on:
       - master
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Instala dependencias
         run: npm ci
 
-      - name: Build project
+      - name: Build frontend
         run: npm run build
 
-      - name: Setup SSH
+      - name: Copia clave SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Add server to known_hosts
+      - name: Agrega host a known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p 122 prisma.dcc.uchile.cl >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via rsync over SSH (replace old content)
+      - name: Deploy frontend via rsync
         run: |
-          rsync -avz --delete -e "ssh -p 122" ./dist/browser/ efaundez@prisma.dcc.uchile.cl:/home/efaundez/imgpedia_front/browser/
+          rsync -avz --delete -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/browser/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/efaundez/imgpedia_front/browser/
