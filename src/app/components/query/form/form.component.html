@@ -20,7 +20,7 @@
             <label for="timeout" class="form-label me-3">Execution Timeout (ms)
                 <i class="bi bi-clock-fill"></i>
             </label>
-            <input name="timeout" id="timeout" type="number" class="form-control custom-border" [(ngModel)]="timeout" #timeout="ngModel" placeholder="Set Timeout Here (No timeout default)"/>
+            <input name="timeout" [(ngModel)]="timeout" id="timeout" type="number" class="form-control custom-border"  placeholder="Set Timeout Here (No timeout default)"/>
             <br />
         </div>
 

@@ -48,7 +48,7 @@ export class FormComponent implements OnInit, OnDestroy {
         timeout: this.timeout,
         clientQueryId: this.clientQueryId
       };
-
+      console.log('Running query:', queryDTO);
       // let response = DUMMY_SPARQL_RESULT;
       // this.resultsEmitter.emit(response);
       // this.loading = false;
@@ -57,8 +57,12 @@ export class FormComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       );
 
-      if (this.timeout > 0) {
-        query$ = query$.pipe(timeout(this.timeout));
+      // Ensure timeout is in milliseconds and positive
+      console.log(`Running query with timeout: ${this.timeout} ms`);
+      const timeoutMs = Number(this.timeout) > 0 ? Number(this.timeout) : 0;
+      if (timeoutMs > 0) {
+        console.log(`Setting timeout for query: ${timeoutMs} ms`);
+        query$ = query$.pipe(timeout(timeoutMs));
       }
 
       this.querySubscription = query$
@@ -66,21 +70,27 @@ export class FormComponent implements OnInit, OnDestroy {
           catchError(error => {
             if (error.name === 'TimeoutError') {
               console.error('Query timeout:', error);
+              this.errorEmitter.emit('Query timeout exceeded.');
               this.stop();
             } else if (error.message && error.message.includes('ERR_CONNECTION_REFUSED')) {
               console.error('Connection error:', error);
               this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
             } else {
-              console.error(error.error);
+              console.error(error.error || error);
               this.errorEmitter.emit("IMGpedia services are not responding. Please try again later.");
             }
             this.loading = false;
-            return throwError(() => new Error(error));
+            return throwError(() => error);
           })
         )
-        .subscribe(response => {
-          this.formatHandler(response, this.format);
-          this.loading = false;
+        .subscribe({
+          next: response => {
+            this.formatHandler(response, this.format);
+            this.loading = false;
+          },
+          error: () => {
+            this.loading = false;
+          }
         });
     }
   }
