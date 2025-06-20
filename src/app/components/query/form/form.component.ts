@@ -68,6 +68,7 @@ export class FormComponent implements OnInit, OnDestroy {
       this.querySubscription = query$
         .pipe(
           catchError(error => {
+            console.log('error', error.error);
             if (error.name === 'TimeoutError') {
               console.error('Query timeout:', error);
               this.errorEmitter.emit('Query timeout exceeded.');
@@ -75,9 +76,13 @@ export class FormComponent implements OnInit, OnDestroy {
             } else if (error.message && error.message.includes('ERR_CONNECTION_REFUSED')) {
               console.error('Connection error:', error);
               this.errorEmitter.emit('Failed to load resource: net::ERR_CONNECTION_REFUSED');
+            } else if (error.error && error.error.includes('The query syntax is invalid')) {
+              this.errorEmitter.emit(error.error);
+              this.stop();
             } else {
               console.error(error.error || error);
               this.errorEmitter.emit("IMGpedia services are not responding. Please try again later.");
+              this.stop();
             }
             this.loading = false;
             return throwError(() => error);
