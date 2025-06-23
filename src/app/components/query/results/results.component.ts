@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SparqlResult } from '../../../models/SparqlResult';
 import { VisualResultsComponent } from './visual-results/visual-results.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'results',
-  imports: [CommonModule, FormsModule, MatPaginatorModule, VisualResultsComponent],
+  imports: [CommonModule, FormsModule, MatPaginatorModule, VisualResultsComponent, RouterModule],
   templateUrl: './results.component.html',
   styleUrl: './results.component.scss'
 })
@@ -60,6 +61,15 @@ export class ResultsComponent implements OnInit, OnChanges{
     } catch (_) {
       return false;
     }
+  }
+
+  isImgpediaResource(value: string): boolean {
+    return typeof value === 'string' && value.startsWith('http://imgpedia.dcc.uchile.cl/resource/');
+  }
+
+  getImgpediaResourceName(value: string): string {
+    // Devuelve solo el nombre del recurso después de la última barra
+    return value.substring(value.lastIndexOf('/') + 1);
   }
 
   isNumberValue(value: any): boolean {

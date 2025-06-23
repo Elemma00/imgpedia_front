@@ -25,15 +25,19 @@
                     <tr class="table-info">
                       @for (column of sparqlResult.head.vars; track $index) {
                         @if(row[column]){
-                          <td>
-                          @if(isUrl(row[column].value)) {
-                            <a [href]="row[column].value" target="_blank" rel="noopener noreferrer">{{ row[column].value }}</a>
-                          } @else if(isNumberValue(row[column].value)) {
-                            {{ formatNumber(row[column].value) }}
-                          } @else {
+                         <td>
+                        @if(isImgpediaResource(row[column].value)) {
+                          <a [routerLink]="['/detail', getImgpediaResourceName(row[column].value)]">
                             {{ row[column].value }}
-                          }
-                          </td>
+                          </a>
+                        } @else if(isUrl(row[column].value)) {
+                          <a [href]="row[column].value" target="_blank" rel="noopener noreferrer">{{ row[column].value }}</a>
+                        } @else if(isNumberValue(row[column].value)) {
+                          {{ formatNumber(row[column].value) }}
+                        } @else {
+                          {{ row[column].value }}
+                        }
+                      </td>
                         }
                         @else{
                           <td>N/A</td>
