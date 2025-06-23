@@ -62,6 +62,16 @@ export class ResultsComponent implements OnInit, OnChanges{
     }
   }
 
+  isNumberValue(value: any): boolean {
+    return value !== null && value !== undefined && !isNaN(Number(value)) && value.trim() !== '';
+  }
+
+  formatNumber(value: any): string {
+    // Puedes ajustar los decimales según lo que prefieras
+    return Number(value).toLocaleString(undefined, { maximumFractionDigits: 6});
+  }
+
+
   private resetState(): void {
     this.pageIndex = 0;
     this.paginatedResults = [];

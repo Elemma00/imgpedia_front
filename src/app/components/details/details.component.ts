@@ -99,7 +99,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         const similar = this.descriptors[desc].find(
           s => decodeURIComponent(s.fileNameUrl) === decodedTitle
         );
-
+        
         if (similar) {
           similar.thumbUrl = key >= 0 ? page.imageinfo[0].thumburl : Constants.IMG_MISSING_URL;
         }
@@ -112,7 +112,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this.http.getSimilarImgInfo(similars.slice(i, i + Constants.MAX_WIKI_REQUEST), this.getSimilarImageSize())
         .subscribe(res => {
           const pages = res.query.pages;
-          // console.log('Retrieved similar image URLs:', pages);
+          console.log('Retrieved similar image URLs:', pages);
           for (const key in pages) {
             if (pages.hasOwnProperty(key)) {
               this.addBindingUrl(pages[key], +key);

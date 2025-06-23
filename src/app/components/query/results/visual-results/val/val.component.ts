@@ -34,4 +34,12 @@ export class ValComponent implements OnInit {
     }
   }
 
+  isNumberValue(value: any): boolean {
+    return value !== null && value !== undefined && !isNaN(Number(value)) && value.toString().trim() !== '';
+  }
+
+  formatNumber(value: any): string {
+    return Number(value).toLocaleString(undefined, { maximumFractionDigits: 6 });
+  }
+
 }
