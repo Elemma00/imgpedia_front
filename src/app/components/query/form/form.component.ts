@@ -81,7 +81,7 @@ export class FormComponent implements OnInit, OnDestroy {
               this.stop();
             } else {
               console.error(error.error || error);
-              this.errorEmitter.emit("IMGpedia services are not responding. Please try again later.");
+              this.errorEmitter.emit(error.error);
               this.stop();
             }
             this.loading = false;
