@@ -20,9 +20,11 @@
   <mat-paginator 
     [length]="sparqlResult.results.bindings.length"
     [pageSize]="pageSize"
-    [pageSizeOptions]="[10, 25, 50, 100]"
+    [pageSizeOptions]="pageSizeOptions"
     [showFirstLastButtons]="true"
-    (page)="onPageChange($event)">
+    (page)="onPageChange($event)"
+    [selectConfig]="{ disableOptionCentering: true }"
+    aria-label="Select page">
   </mat-paginator>
 } @else{
   <h4>No Results Found</h4>

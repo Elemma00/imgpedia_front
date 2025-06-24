@@ -18,6 +18,7 @@ export class ResultsComponent implements OnInit, OnChanges{
   selectedView: string = 'table'; // view por defecto
   pageIndex: number = 0;
   pageSize: number = 50;
+  pageSizeOptions: number[] = [10, 25, 50, 100];
   paginatedResults: any[] = [];
   hasVisualResults!: boolean
 
@@ -26,6 +27,7 @@ export class ResultsComponent implements OnInit, OnChanges{
   @ViewChild('resultsContainer', { static: true }) resultsContainer!: ElementRef;
 
   ngOnInit(): void {
+    this.setDynamicPageSize();
     this.updatePaginatedResults();
     this.checkForImages();
   }
@@ -107,6 +109,26 @@ export class ResultsComponent implements OnInit, OnChanges{
     }
     
     this.selectedView = this.hasVisualResults ? 'visual' : 'table';
+  }
+
+  setDynamicPageSize() {
+    const total = this.sparqlResult?.results?.bindings?.length || 0;
+    if (total <= 10) {
+      this.pageSize = total || 1;
+      this.pageSizeOptions = [this.pageSize];
+    } else if (total <= 25) {
+      this.pageSize = 10;
+      this.pageSizeOptions = [10, total];
+    } else if (total <= 50) {
+      this.pageSize = 25;
+      this.pageSizeOptions = [10, 25, total];
+    } else if (total <= 100) {
+      this.pageSize = 50;
+      this.pageSizeOptions = [10, 25, 50, total];
+    } else {
+      this.pageSize = 50;
+      this.pageSizeOptions = [10, 25, 50, 100, total];
+    }
   }
   
 }

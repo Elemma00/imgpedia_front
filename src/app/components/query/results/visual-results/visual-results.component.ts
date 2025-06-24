@@ -24,6 +24,7 @@ export class VisualResultsComponent implements OnInit, OnChanges {
 
   pageIndex: number = 0;
   pageSize: number = 50;
+  pageSizeOptions: number[] = [10, 25, 50, 100];
   paginatedResults: any[] = [];
 
   private componentInstances: { [key: string]: any } = {};
@@ -34,10 +35,10 @@ export class VisualResultsComponent implements OnInit, OnChanges {
     if (this.sparqlResult && this.sparqlResult.head && this.sparqlResult.head.vars) {
       this.headers = this.sparqlResult.head.vars;
       this.colWidth = (100 / this.headers.length) + '%';
+      this.setDynamicPageSize();
       if (this.headers.length > 0 && this.sparqlResult.results.bindings.length > 0) {
         this.columns = {};
         this.prepareColumns();
-        // this.parseResult();
         this.updatePaginatedResults();
       }
     }
@@ -119,15 +120,15 @@ export class VisualResultsComponent implements OnInit, OnChanges {
   updatePaginatedResults(): void {
     const startIndex = this.pageIndex * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    
+
     for (const key of this.headers) {
       if (this.columns[key]) {
         this.columns[key].values = [];
       }
     }
-    
+
     const paginatedBindings = this.sparqlResult.results.bindings.slice(startIndex, endIndex);
-    
+
     for (const binding of paginatedBindings) {
       for (const key of this.headers) {
         if (binding.hasOwnProperty(key)) {
@@ -135,7 +136,29 @@ export class VisualResultsComponent implements OnInit, OnChanges {
         }
       }
     }
-    
+
     this.componentInstances = {};
   }
+
+  setDynamicPageSize() {
+    const total = this.sparqlResult?.results?.bindings?.length || 0;
+    if (total <= 10) {
+      this.pageSize = total || 1;
+      this.pageSizeOptions = [this.pageSize];
+    } else if (total <= 25) {
+      this.pageSize = 10;
+      this.pageSizeOptions = [10, total];
+    } else if (total <= 50) {
+      this.pageSize = 25;
+      this.pageSizeOptions = [10, 25, total];
+    } else if (total <= 100) {
+      this.pageSize = 50;
+      this.pageSizeOptions = [10, 25, 50, total];
+    } else {
+      this.pageSize = 50;
+      this.pageSizeOptions = [10, 25, 50, 100, total];
+    }
+  }
+
+  
 }
