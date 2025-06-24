@@ -1,0 +1,11 @@
+  ::ng-deep .mat-mdc-select-value {
+  width: 100%;
+  overflow: hidden;
+  left: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
