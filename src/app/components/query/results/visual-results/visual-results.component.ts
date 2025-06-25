@@ -156,7 +156,7 @@ export class VisualResultsComponent implements OnInit, OnChanges {
       this.pageSizeOptions = [10, 25, 50, total];
     } else {
       this.pageSize = 50;
-      this.pageSizeOptions = [10, 25, 50, 100, total];
+      this.pageSizeOptions = [10, 25, 50, 100, 200];
     }
   }
 
