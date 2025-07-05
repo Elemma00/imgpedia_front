@@ -43,9 +43,10 @@ export class FormComponent implements OnInit, OnDestroy {
 
     if (queryForm.valid) {
       this.timeout = this.timeout == 0 ? 30 * 60 * 1000 : this.timeout;
+      const backendFormat = this.format === 'noformat' ? 'json' : this.format;
       const queryDTO: SparqlQueryDTO = {
         query: this.queryText,
-        format: this.format,
+        format: backendFormat,
         timeout: this.timeout,
         clientQueryId: this.clientQueryId
       };
@@ -113,22 +114,13 @@ export class FormComponent implements OnInit, OnDestroy {
     window.location.reload();
   }
 
-  
-
   formatHandler(response: any, format: string) {
-    switch (format) {
-      case 'json':
-        this.resultsEmitter.emit(response);
-        break;
-      case 'xml':
-      case 'csv':
-      case 'tsv':
-      case 'ttl':
-      case 'nt':
-        this.downloadFile(response, format);
-        break;
-      default:
-        console.warn('Unknown format:', format);
+    if (format === 'noformat') {
+      this.resultsEmitter.emit(response);
+    } else if (format === 'json') {
+      this.downloadFile(JSON.stringify(response, null, 2), 'json');
+    } else {
+      this.downloadFile(response, format);
     }
   }
 
