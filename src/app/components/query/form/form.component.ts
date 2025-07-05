@@ -42,6 +42,7 @@ export class FormComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     if (queryForm.valid) {
+      this.timeout = this.timeout == 0 ? 30 * 60 * 1000 : this.timeout;
       const queryDTO: SparqlQueryDTO = {
         query: this.queryText,
         format: this.format,
@@ -49,10 +50,6 @@ export class FormComponent implements OnInit, OnDestroy {
         clientQueryId: this.clientQueryId
       };
       console.log('Running query:', queryDTO);
-      // let response = DUMMY_SPARQL_RESULT;
-      // this.resultsEmitter.emit(response);
-      // this.loading = false;
-      // this.errorEmitter.emit("");
       let query$ = this.imgpediaService.runQuery(queryDTO).pipe(
         takeUntil(this.destroy$)
       );
