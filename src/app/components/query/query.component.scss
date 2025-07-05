@@ -1,6 +1,6 @@
 
 .sparql {
-    margin-top: 5rem;
+    margin-top: 0.5rem;
 }
 
 #inputSparql{
@@ -12,4 +12,44 @@
 .custom-border {
     border-color: #007bff; /* Cambia este color al que desees */
     width: 50%; /* Ajusta el ancho del input */
+}
+
+
+.example-selector-group {
+  max-width: 420px;
+  .input-group-text {
+    background: #0056b3 !important;
+    color: #fff !important;
+    border-radius: 0.375rem 0 0 0.375rem;
+    border: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    padding-right: 0.75rem;
   }
+  .position-relative {
+    flex-grow: 1;
+  }
+  .example-selector {
+    border-left: 0;
+    border-radius: 0 0.375rem 0.375rem 0;
+    background: #f8fafc;
+    color: #003366;
+    font-weight: 500;
+    transition: border-color 0.2s;
+    padding-right: 2.5rem !important;
+    &:focus {
+      border-color: #0056b3;
+      box-shadow: 0 0 0 0.2rem rgba(0,86,179,.15);
+    }
+  }
+  .selector-caret {
+    position: absolute;
+    right: 1.2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #0056b3;
+    font-size: 1.1rem;
+  }
+}

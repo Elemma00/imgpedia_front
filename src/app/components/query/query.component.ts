@@ -12,7 +12,8 @@ import { keywordCompletionSource, localCompletionSource } from '../../util/sparq
 import { wordHover } from '../../util/sparqlEditor/extentions/tooltip';
 import { FormComponent } from './form/form.component';
 import { ResultsComponent } from './results/results.component';
-
+import { HttpClient } from '@angular/common/http';
+import sparqlExamples from '../../util/sparql-examples';
 
 @Component({
   selector: 'app-query',
@@ -26,16 +27,28 @@ export class QueryComponent implements AfterViewInit, OnInit {
   loading!: boolean;
   results!: any;
   errorMessage: string | null = null;
+  exampleQueries: any[] = [];
+  selectedExampleDescription: string = '';
 
-  constructor() {
+  private editorView?: EditorView;
+
+  constructor(private http: HttpClient) {
     this.loading = false;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const storedQueryText = localStorage.getItem('queryText');
     const storedResults = localStorage.getItem('results');
 
     this.queryText = storedQueryText ? storedQueryText : Constants.INITIAL_QUERY;
+
+    try {
+      this.exampleQueries = sparqlExamples;
+      console.log('Example queries loaded:', this.exampleQueries);
+    } catch (error) {
+      console.error('Error loading example queries:', error);
+      this.exampleQueries = [];
+    }
 
     try {
       this.results = storedResults ? JSON.parse(storedResults) : null;
@@ -45,6 +58,13 @@ export class QueryComponent implements AfterViewInit, OnInit {
     }
     this.errorMessage = null; 
   }
+
+  setExampleQuery(example: any) {
+    this.queryText = example.query;
+    localStorage.setItem('queryText', this.queryText);
+    this.updateEditorText(example.query);
+  }
+
 
   ngAfterViewInit() {
     this.initializeEditor();
@@ -62,7 +82,7 @@ export class QueryComponent implements AfterViewInit, OnInit {
 
     const domElement = document.getElementById('inputSparql');
     if (domElement) {
-      const editor = new EditorView({
+      this.editorView = new EditorView({
         state: EditorState.create({
           doc: this.queryText,
           extensions: [
@@ -86,13 +106,42 @@ export class QueryComponent implements AfterViewInit, OnInit {
         parent: domElement,
       });
     }
+  }
 
+  updateEditorText(newText: string) {
+    this.queryText = newText;
+    localStorage.setItem('queryText', newText);
+
+    // Si el editor ya está inicializado, actualiza el contenido visualmente
+    if (this.editorView) {
+      this.editorView.dispatch({
+        changes: {
+          from: 0,
+          to: this.editorView.state.doc.length,
+          insert: newText
+        }
+      });
+    }
+  }
+
+  onExampleSelect(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const key = select.value;
+    const example = this.exampleQueries.find(e => e.key === key);
+    if (example) {
+      this.setExampleQuery(example);
+      this.selectedExampleDescription = example.description;
+    }
+  }
+
+  onExampleHover(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    const key = select.value;
+    const example = this.exampleQueries.find(e => e.key === key);
+    this.selectedExampleDescription = example ? example.description : '';
   }
 
   receiveResults($event: any) {
-    // this.results = JSON.parse($event);
-    // console.log(this.results);
-    // this.errorMessage = null;
     try {
       this.results = JSON.parse($event);
     } catch (e) {

@@ -7,6 +7,38 @@
             <label class="form-label" for="default-graph-uri">Default Data Set Name (Graph IRI)</label><br />
             <input class="form-control form-control-sm custom-border" type="text" name="default-graph-uri" id="default-graph-uri" value="" placeholder="Insert a graph (now using default graph) " size="30"/>
         </div>
+        
+    <div class="mb-3">
+    <label class="form-label fw-bold" for="exampleSelector">Ejemplos de consultas:</label>
+    <div class="input-group example-selector-group" style="max-width: 420px;">
+        <span class="input-group-text bg-imgpedia text-white border-0">
+        <i class="bi bi-lightbulb"></i>
+        </span>
+        <div class="position-relative flex-grow-1">
+        <select
+            id="exampleSelector"
+            class="form-select example-selector pe-5"
+            (change)="onExampleSelect($event)"
+            [title]="selectedExampleDescription"
+            (mouseover)="onExampleHover($event)"
+        >
+            <option value="" disabled selected>Select an example...</option>
+            @for(example of exampleQueries; track $index) {
+            <option
+                [value]="example.key"
+                [attr.title]="example.description"
+            >
+                {{ example.button }}
+            </option>
+            }
+        </select>
+        <i class="bi bi-caret-down-fill selector-caret"></i>
+        </div>
+    </div>
+    <span class="text-muted ms-2 small fst-italic" *ngIf="selectedExampleDescription">
+        {{ selectedExampleDescription }}
+    </span>
+    </div>
 
         <div id="inputSparql"></div>
 

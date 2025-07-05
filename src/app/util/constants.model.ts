@@ -103,8 +103,10 @@ export class Constants {
 
   static URL_VALUES = [Constants.IMGPEDIA_URL + '/ontology#'];
 
-  static INITIAL_QUERY = 'SELECT ?Source ?Target ?Distance WHERE{ ?Rel <http://imgpedia.dcc.uchile.cl/ontology#sourceImage> ?Source;\n' +
-    ' <http://imgpedia.dcc.uchile.cl/ontology#targetImage> ?Target;\n' +
-    ' <http://imgpedia.dcc.uchile.cl/ontology#distance> ?Distance .\n' +
-    '} LIMIT 10';
+  static INITIAL_QUERY = `PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+    
+SELECT ?Source ?Target ?Distance WHERE{ ?Rel imo:sourceImage ?Source;
+  imo:targetImage ?Target;
+  imo:distance ?Distance .
+} LIMIT 10`;
 }

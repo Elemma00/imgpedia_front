@@ -21,7 +21,7 @@ export class FormComponent implements OnInit, OnDestroy {
   @Output() stopEmitter = new EventEmitter();
   @Output() errorEmitter = new EventEmitter<string>();
 
-  format: string = 'json';
+  format: string = 'noformat';
   timeout: number = 0;
   clientQueryId: string = `client_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   private querySubscription!: Subscription;
@@ -42,12 +42,13 @@ export class FormComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     if (queryForm.valid) {
-      this.timeout = this.timeout == 0 ? 30 * 60 * 1000 : this.timeout;
+      //Setting a timeout of 30 minutes if no timeout is set
+      const timeoutset = this.timeout == 0 ? 30 * 60 * 1000 : this.timeout;
       const backendFormat = this.format === 'noformat' ? 'json' : this.format;
       const queryDTO: SparqlQueryDTO = {
         query: this.queryText,
         format: backendFormat,
-        timeout: this.timeout,
+        timeout: timeoutset,
         clientQueryId: this.clientQueryId
       };
       console.log('Running query:', queryDTO);
