@@ -2,6 +2,18 @@ import { query } from "@angular/animations";
 
 const sparqlExamples = [
   {
+    key:"basicQuery",
+    button: "Simple Query To Retrieve Images",
+    description: "A basic query to retrieve images and their distances from a given image.",
+    query: `PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+
+SELECT ?Source ?Target ?Distance WHERE{ ?Rel imo:sourceImage ?Source;
+  imo:targetImage ?Target;
+  imo:distance ?Distance .
+} LIMIT 10`
+  },
+
+  {
     key: "federatedClustering",
     button: "Federated Clustering",
     description: "Grouping countries by life expectancy and HDI using the new operator CLUSTER BY.",
@@ -53,15 +65,37 @@ CLUSTER BY ?hog WITH sim:kmeans(3) AS ?c
   },
 
   {
-    key:"basicQuery",
-    button: "Simple Query To Retrieve Images",
-    description: "A basic query to retrieve images and their distances from a given image.",
-    query: `PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+    key: "simiJoinFede",
+    button: "Similarity Join Query ",
+    description: "A query that performs a similarity join between Imgpedia and Wikidata resources using the new operator SIMILARITY JOIN.",
+    query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
+PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-SELECT ?Source ?Target ?Distance WHERE{ ?Rel imo:sourceImage ?Source;
-  imo:targetImage ?Target;
-  imo:distance ?Distance .
-} LIMIT 10`
+# This query retrieves IMGpedia images associated with the Entel Tower (wd:Q1421270)
+# and extracts their HOG descriptors.
+# Then, it finds the 10 most similar IMGpedia images that are associated with any tower
+# (as defined in Wikidata), using the Manhattan distance between HOG descriptors
+# via the SIMILARITY JOIN operator.
+
+SELECT ?img2 ?tower ?dist WHERE {
+{ ?img1 imo:associatedWith wd:Q1421270 . # Entel Tower
+  ?vector1 a imo:HOG ; # HOG descriptor
+  imo:describes ?img1 ;
+  imo:value ?hog1 .}
+SIMILARITY JOIN ON (?hog1) (?hog2) TOP 10 DISTANCE sim:manhattanvec AS ?dist # 10nn w/ Manhattan
+{
+  SERVICE <https://query.wikidata.org/sparql> {
+  ?tower wdt:P31/wdt:P279* wd:Q12518 . # Towers
+}
+  ?img2 imo:associatedWith ?tower .
+  ?vector2 a imo:HOG ;
+  imo:describes ?img2 ;
+  imo:value ?hog2 .
+}}
+
+`
   }
 ];
 export default sparqlExamples;
