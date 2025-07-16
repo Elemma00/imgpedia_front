@@ -35,9 +35,11 @@
         <i class="bi bi-caret-down-fill selector-caret"></i>
         </div>
     </div>
-    <span class="text-muted ms-2 small fst-italic" *ngIf="selectedExampleDescription">
-        {{ selectedExampleDescription }}
-    </span>
+    @if(selectedExampleDescription){
+        <span class="text-muted ms-2 small fst-italic">
+            {{ selectedExampleDescription }}
+        </span>
+    }
     </div>
 
         <div id="inputSparql"></div>

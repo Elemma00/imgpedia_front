@@ -1,19 +1,20 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { autocompletion, CompletionContext, startCompletion } from '@codemirror/autocomplete';
 import { indentWithTab } from "@codemirror/commands";
-import { linter, lintGutter } from "@codemirror/lint";
+import { lintGutter } from "@codemirror/lint";
 import { search } from "@codemirror/search";
 import { EditorState } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { Constants } from '../../util/constants.model';
+import sparqlExamples from '../../util/sparql-examples';
 import { sparql, SparqlLanguage } from '../../util/sparqlEditor/codemirror/index';
 import { keywordCompletionSource, localCompletionSource } from '../../util/sparqlEditor/extentions/complete';
 import { wordHover } from '../../util/sparqlEditor/extentions/tooltip';
 import { FormComponent } from './form/form.component';
 import { ResultsComponent } from './results/results.component';
-import { HttpClient } from '@angular/common/http';
-import sparqlExamples from '../../util/sparql-examples';
 
 @Component({
   selector: 'app-query',
@@ -87,10 +88,19 @@ export class QueryComponent implements AfterViewInit, OnInit {
           doc: this.queryText,
           extensions: [
             basicSetup,
-            keymap.of([indentWithTab]),
+            keymap.of([
+                {
+                  key: "Ctrl-Space",
+                  run: (view) => {
+                    startCompletion(view);
+                    return true;
+                  }
+                },
+              indentWithTab]),
             search({ top: true }),
             lintGutter(),
             sparql(),
+            autocompletion({ override: [this.wikidataCompletionSource.bind(this)] }),
             SparqlLanguage,
             sparqlKeywordCompletions,
             sparqlLocalCompletions,
@@ -122,6 +132,29 @@ export class QueryComponent implements AfterViewInit, OnInit {
         }
       });
     }
+  }
+
+  wikidataCompletionSource(context: CompletionContext) {
+    const match = context.matchBefore(/(?:^|\s)(wd:|wdt:)([^\n]*)$/);
+    if (!match || (match.from == match.to && !context.explicit)) return null;
+
+    const prefix = match.text.match(/(wd:|wdt:)/)?.[0] || '';
+    const searchText = match.text.replace(/^(?:^|\s)(wd:|wdt:)/, '').trim();
+
+    if (!searchText) return null;
+
+    return fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&language=en&type=item&search=${encodeURIComponent(searchText)}&origin=*`)
+      .then(response => response.json())
+      .then(data => ({
+        from: match.from + match.text.indexOf(prefix) + prefix.length,
+        to: context.pos,
+        options: (data.search || []).map((item: any) => ({
+          label: item.label,
+          type: "entity",
+          info: item.description,
+          apply: item.id
+        }))
+      }));
   }
 
   onExampleSelect(event: Event) {
