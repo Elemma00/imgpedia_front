@@ -117,7 +117,6 @@ export class QueryComponent implements AfterViewInit, OnInit {
     this.queryText = newText;
     localStorage.setItem('queryText', newText);
 
-    // Si el editor ya está inicializado, actualiza el contenido visualmente
     if (this.editorView) {
       this.editorView.dispatch({
         changes: {
