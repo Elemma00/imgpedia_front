@@ -1,35 +1,64 @@
-.carousel{
-    margin-bottom: 20px;
+.carousel {
+  margin-bottom: 20px;
 }
 
 .carousel-item {
-    height: 75vh; /* Asegura que los elementos del carrusel ocupen toda la altura del carrusel */
-  }
-  
-  .carousel-item img {
-    height: 100%; /* Ajusta la imagen al contenedor */
-    width: 100%; /* Asegura que la imagen ocupe todo el ancho */
-    object-fit: cover; /* Centra la imagen y mantiene su relación de aspecto */
-    object-position: center; /* Centra la imagen */
-  }
+  height: 75vh;
+  /* Asegura que los elementos del carrusel ocupen toda la altura del carrusel */
+}
 
-  .carousel-control-prev-icon,
+.carousel-item img {
+  height: 100%;
+  /* Ajusta la imagen al contenedor */
+  width: 100%;
+  /* Asegura que la imagen ocupe todo el ancho */
+  object-fit: cover;
+  /* Centra la imagen y mantiene su relación de aspecto */
+  object-position: center;
+  /* Centra la imagen */
+}
+
+.carousel-control-prev-icon,
 .carousel-control-next-icon {
-  background-color: #007bff; /* Cambia este color al que desees */
-  border-radius: 50%; /* Opcional: añade un borde redondeado */
-  padding: 10px; /* Opcional: añade un padding para hacer el icono más grande */
+  background-color: #007bff;
+  /* Cambia este color al que desees */
+  border-radius: 50%;
+  /* Opcional: añade un borde redondeado */
+  padding: 10px;
+  /* Opcional: añade un padding para hacer el icono más grande */
 }
 
 .carousel-caption {
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
-    padding: 1rem; /* Espaciado alrededor del texto */
-    border-radius: 0.5rem; /* Bordes redondeados */
-    width: 35%; /* Ajusta el ancho del caption */
-    left: 50%; /* Centra el caption horizontalmente */
-    transform: translateX(-50%); /* Centra el caption horizontalmente */
-  }
-  
-  .carousel-caption h3,
-  .carousel-caption p {
-    color: #ffffff; /* Color del texto blanco */
-  }
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo negro semitransparente */
+  padding: 1rem;
+  /* Espaciado alrededor del texto */
+  border-radius: 0.5rem;
+  /* Bordes redondeados */
+  width: 35%;
+  /* Ajusta el ancho del caption */
+  left: 50%;
+  /* Centra el caption horizontalmente */
+  transform: translateX(-50%);
+  /* Centra el caption horizontalmente */
+}
+
+.carousel-caption h3,
+.carousel-caption p {
+  color: #ffffff;
+  /* Color del texto blanco */
+}
+
+.carousel-img-hover {
+  transition: box-shadow 0.3s, filter 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.carousel-img-hover:hover {
+  box-shadow: 0 0 40px 10px #007bffcc, 0 8px 32px 0 #0006;
+  filter: brightness(1.18) saturate(1.25) blur(0.5px);
+  transform: scale(1.06); // Solo zoom, sin rotación
+  outline: 3px solid #007bff;
+  outline-offset: -6px;
+  z-index: 2;
+}

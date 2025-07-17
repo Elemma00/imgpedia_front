@@ -1,5 +1,5 @@
 <header>
-    <div id="carouselExampleCaptions" class="carousel slide">
+    <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="1500">
         <div class="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
           <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -9,8 +9,8 @@
         </div>
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <a [routerLink]="['/detail/Palacio_de_LaMoneda02.png']">
-              <img src="index/LaMoneda.png" class="d-block w-100" alt="Image of Moneda Palace in Santiago de Chile">
+            <a [routerLink]="['/detail/Palacio_de_LaMoneda02.png']" title="Click on the image to see more details">
+              <img src="index/LaMoneda.png" class="d-block w-100 carousel-img-hover" alt="Image of Moneda Palace in Santiago de Chile">
             </a>
             <div class="carousel-caption d-none d-md-block ">
               <h3 class="display-3">La Moneda Palace</h3>
@@ -19,7 +19,7 @@
           </div>
           <div class="carousel-item">
             <a [routerLink]="['/detail/London_Thames_Sunset_panorama_-_Feb_2008.jpg']">
-              <img src="index/london.jpg" class="d-block w-100" alt="Image of River Thames in London">
+              <img src="index/london.jpg" class="d-block w-100 carousel-img-hover" alt="Image of River Thames in London">
             </a>
             <div class="carousel-caption d-none d-md-block">
               <h3 class="display-3">River Thames</h3>
@@ -28,7 +28,7 @@
           </div>
           <div class="carousel-item">
             <a [routerLink]="['/detail/Budapest_castle_night_5.jpg']">
-              <img src="index/budapest.jpg" class="d-block w-100" alt="Image of Buda Castle in Budapest">
+              <img src="index/budapest.jpg" class="d-block w-100 carousel-img-hover" alt="Image of Buda Castle in Budapest">
             </a>
             <div class="carousel-caption d-none d-md-block">
               <h3 class="display-3">Buda Castle</h3>
@@ -37,7 +37,7 @@
           </div>
           <div class="carousel-item">
             <a [routerLink]="['/detail/All_Gizah_Pyramids.jpg']">
-              <img src="index/egypt.jpg" class="d-block w-100" alt="Image of Pyramids of Giza in Egypt">
+              <img src="index/egypt.jpg" class="d-block w-100 carousel-img-hover" alt="Image of Pyramids of Giza in Egypt">
             </a>
             <div class="carousel-caption d-none d-md-block ">
               <h3 class="display-3">Pyramids of Giza</h3>
@@ -46,7 +46,7 @@
           </div>
           <div class="carousel-item">
             <a [routerLink]="['/detail/P3170117.JPG']">
-              <img src="index/facultad.jpg" class="d-block w-100" alt="Image of Moneda Palace in Santiago de Chile">
+              <img src="index/facultad.jpg" class="d-block w-100 carousel-img-hover" alt="Image of Moneda Palace in Santiago de Chile">
             </a>
             <div class="carousel-caption d-none d-md-block ">
               <h3 class="display-3">FCFM Escuela de Injenieria</h3>
