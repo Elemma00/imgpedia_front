@@ -78,6 +78,8 @@ export class FormComponent implements OnInit, OnDestroy {
             } else if (error.error && error.error.includes('The query syntax is invalid')) {
               this.errorEmitter.emit(error.error);
               this.stop();
+            } else if (error.message.includes('The proxy server could not handle the request')) {
+              this.errorEmitter.emit('the query might be too large, please try to run the query again or reduce the size of the entity set');
             } else {
               console.error(error.error || error);
               this.errorEmitter.emit(error.error);
