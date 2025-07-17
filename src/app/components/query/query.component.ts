@@ -143,20 +143,23 @@ export class QueryComponent implements AfterViewInit, OnInit {
 
     if (!searchText) return null;
 
-    return fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&language=en&type=item&search=${encodeURIComponent(searchText)}&origin=*`)
+    // Decide el tipo de búsqueda según el prefijo
+    const type = prefix === 'wdt:' ? 'property' : 'item';
+
+    return fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&language=en&type=${type}&search=${encodeURIComponent(searchText)}&origin=*`)
       .then(response => response.json())
       .then(data => ({
         from: match.from + match.text.indexOf(prefix) + prefix.length,
         to: context.pos,
         options: (data.search || []).map((item: any) => ({
           label: item.label,
-          type: "entity",
+          type: type,
           info: item.description,
           apply: item.id
         }))
       }));
   }
-
+  
   onExampleSelect(event: Event) {
     const select = event.target as HTMLSelectElement;
     const key = select.value;
