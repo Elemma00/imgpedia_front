@@ -22,12 +22,12 @@ PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
-#Using CLUSTER BY to group dog related images based on their HOG vector descriptors
+# Using CLUSTER BY to group dog related images based on their HOG vector descriptors
 
-#Only kmeans clustering is supported at the moment for Imgpedia resources,
-#but other clustering algorithms like k-medoids, DBSCAN can be used for Wikidata resources or others.
+# Only kmeans clustering is supported at the moment for Imgpedia resources,
+# but other clustering algorithms like k-medoids, DBSCAN can be used for Wikidata resources or others.
 
-#TO LEARN MORE ABOUT CLUSTERING OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
+# TO LEARN MORE ABOUT CLUSTERING OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
 
 SELECT ?img ?c WHERE {
   SERVICE <https://query.wikidata.org/sparql>{
@@ -82,10 +82,10 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 # (as defined in Wikidata), using the Manhattan distance between HOG descriptors
 # via the SIMILARITY JOIN operator.
 
-#Only use sim:manhattanvec for Imgpedia resources, since the descriptors are vectors in String format
-#But if the literal value is numeric, sim:manhattan can be used to calculate the distance.
+# Only use sim:manhattanvec for Imgpedia resources, since the descriptors are vectors in String format
+# But if the literal value is numeric, sim:manhattan can be used to calculate the distance.
 
-#TO LEARN MORE ABOUT SIMILARITY JOIN OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
+# TO LEARN MORE ABOUT SIMILARITY JOIN OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
 
 SELECT ?img2 ?tower ?dist WHERE {
 { ?img1 imo:associatedWith wd:Q1421270 . # Entel Tower

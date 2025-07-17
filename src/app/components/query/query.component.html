@@ -43,6 +43,13 @@
     </div>
 
         <div id="inputSparql"></div>
+        
+        @if(showWikidataTip){
+            <div class="wikidata-tip-floating">
+                <strong>Tip:</strong> Start typing <code>wd:</code> or <code>wdt:</code> + the name of the entity you want to trigger Wikidata autocompletion.<br>
+                Example: <code>wd:mona lisa</code> → <code>wd:Q12418</code>
+            </div>
+        }
 
         <form-query [queryText]="queryText" [loading]="loading" (resultsEmitter)="receiveResults($event)" (errorEmitter)="handleError($event)"></form-query>
         

@@ -30,6 +30,8 @@ export class QueryComponent implements AfterViewInit, OnInit {
   errorMessage: string | null = null;
   exampleQueries: any[] = [];
   selectedExampleDescription: string = '';
+  showWikidataTip: boolean = false;
+
 
   private editorView?: EditorView;
 
@@ -88,19 +90,11 @@ export class QueryComponent implements AfterViewInit, OnInit {
           doc: this.queryText,
           extensions: [
             basicSetup,
-            keymap.of([
-                {
-                  key: "Ctrl-Space",
-                  run: (view) => {
-                    startCompletion(view);
-                    return true;
-                  }
-                },
-              indentWithTab]),
+            keymap.of([indentWithTab]),
             search({ top: true }),
             lintGutter(),
             sparql(),
-            autocompletion({ override: [this.wikidataCompletionSource.bind(this)] }),
+            autocompletion({ override: [this.wikidataCompletionSource.bind(this), keywordCompletionSource, localCompletionSource] }),
             SparqlLanguage,
             sparqlKeywordCompletions,
             sparqlLocalCompletions,
@@ -109,6 +103,7 @@ export class QueryComponent implements AfterViewInit, OnInit {
               if (update.changes) {
                 this.queryText = update.state.doc.toString();
                 localStorage.setItem('queryText', this.queryText);
+                this.showWikidataTip = /(wd:|wdt:)/.test(this.queryText);
               }
             })
           ],
@@ -135,21 +130,36 @@ export class QueryComponent implements AfterViewInit, OnInit {
   }
 
   wikidataCompletionSource(context: CompletionContext) {
-    const match = context.matchBefore(/(?:^|\s)(wd:|wdt:)([^\n]*)$/);
-    if (!match || (match.from == match.to && !context.explicit)) return null;
+    const line = context.state.doc.lineAt(context.pos);
+    const textBefore = line.text.slice(0, context.pos - line.from);
 
-    const prefix = match.text.match(/(wd:|wdt:)/)?.[0] || '';
-    const searchText = match.text.replace(/^(?:^|\s)(wd:|wdt:)/, '').trim();
+    const regex = /(wd:|wdt:)([A-Za-záéíóúÁÉÍÓÚüÜñÑ\s]*)/g;
+    let match: RegExpExecArray | null;
+    let found: RegExpExecArray | null = null;
 
-    if (!searchText) return null;
+    while ((match = regex.exec(textBefore)) !== null) {
+      if (regex.lastIndex === textBefore.length) {
+        found = match;
+        break;
+      }
 
-    // Decide el tipo de búsqueda según el prefijo
+      found = match;
+    }
+
+    if (!found) return null;
+
+    const prefix = found[1];
+    const searchText = found[2];
+
+    const matchEnd = found.index + prefix.length + searchText.length;
+    if (matchEnd !== textBefore.length && !context.explicit) return null;
+
     const type = prefix === 'wdt:' ? 'property' : 'item';
 
     return fetch(`https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&language=en&type=${type}&search=${encodeURIComponent(searchText)}&origin=*`)
       .then(response => response.json())
       .then(data => ({
-        from: match.from + match.text.indexOf(prefix) + prefix.length,
+        from: line.from + found.index + prefix.length,
         to: context.pos,
         options: (data.search || []).map((item: any) => ({
           label: item.label,
