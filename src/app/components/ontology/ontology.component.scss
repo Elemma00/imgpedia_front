@@ -1,38 +1,440 @@
+// Main container styles
 .ontology-container {
-  margin: 2rem auto 2rem auto; // margen inferior agregado
-  max-width: 900px;
+  margin: 2rem auto;
+  max-width: 1200px;
   background: #fff;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 2rem 2rem 2rem 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 2.5rem;
   min-height: 600px;
   position: relative;
   z-index: 1;
 }
 
 .ontology-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
   text-align: center;
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 1rem;
 }
 
-.ontology-frame {
-  width: 100%;
-  min-height: 600px;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  background: #f8f9fa;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+.ontology-content {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+// RDF2HTML styles with larger fonts
+.rdf2html {
+  font-size: 16px;
+  line-height: 1.6;
+
+  a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    
+    &.browse {
+      text-decoration: none;
+      font-weight: 600;
+      
+      &:visited {
+        color: #8e44ad;
+      }
+    }
+  }
+
+  p, ol, ul {
+    font-size: 16px;
+    text-align: justify;
+    margin-bottom: 1rem;
+  }
+
+  td, th {
+    font-size: 16px;
+    vertical-align: top;
+    padding: 0.75rem;
+  }
+}
+
+// Description blocks
+.description {
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+
+    th {
+      background-color: #34495e;
+      color: white;
+      padding: 1rem;
+      border-bottom: 2px solid #2c3e50;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: left;
+
+      a.browse {
+        color: #ecf0f1;
+        font-size: 18px;
+        
+        &:hover {
+          color: #bdc3c7;
+        }
+      }
+
+      a.propertyIMG{
+        color: white !important;
+        font-size: 18px;
+        text-decoration: none !important;
+        cursor: default !important;
+      }
+
+      .connector {
+        font-style: normal;
+        display: inline;
+        margin-left: 0;
+        color: #bdc3c7;
+        font-size: 16px;
+      }
+
+      .property-object {
+        display: inline;
+      }
+
+      // No hover effect for imgpedia links in th elements
+      &.no-hover, &.propertyIMG.no-hover {
+        color: #2c3e50 !important;
+        cursor: default !important;
+        text-decoration: none !important;
+        
+        &:hover {
+          color: #2c3e50 !important;
+          text-decoration: none !important;
+          transform: none !important;
+        }
+        
+        &:visited {
+          color: #2c3e50 !important;
+        }
+      }
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #dee2e6;
+      vertical-align: top;
+
+      &:last-child {
+        width: 100%;
+      }
+
+      &.actions {
+        text-align: right;
+        border-top: 2px solid #dee2e6;
+        
+        a {
+          font-size: 14px;
+          padding: 0.25rem 0.5rem;
+          
+          &.specific {
+            color: #e74c3c;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    // Nested tables
+    table {
+      border: 1px solid #dee2e6;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .object-type {
+    display: inline;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  .property-object {
+    display: block;
+    margin: 0.25rem 0;
+    font-size: 16px;
+  }
+
+  .connector {
+    font-style: italic;
+    display: none;
+    margin-left: -0.4em;
+    color: #7f8c8d;
+  }
+
+  // Hidden elements
+  tr[class="http://www.w3.org/2000/01/rdf-schema#label"],
+  tr[class="http://www.w3.org/1999/02/22-rdf-syntax-ns#value"] td a.describe,
+  tr[class="http://rhizomik.net/rhizomer/services#hasService"],
+  tr[class="http://swrc.ontoware.org/ontology#authors"],
+  tr[class="http://purl.org/dc/elements/1.1/creator"] {
+    display: none;
+  }
+}
+
+// Edition controls
+.edition {
+  float: right;
+  font-size: 14px;
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ecf0f1;
+  border-radius: 4px;
+  border: 1px solid #bdc3c7;
+}
+
+// Browser navigation
+.browser {
+  font-size: 16px;
+  text-align: center;
+  padding: 1rem;
+  background-color: #f1f2f6;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+// Logo styles
+#logo a {
+  text-decoration: none;
+  color: #8e44ad;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+#footlogo {
+  position: relative;
+  left: 50%;
+  width: 200px;
+  margin-left: -100px;
+  margin-top: 2rem;
+}
+
+// Image styles
+img {
+  border: 0;
+  max-width: 100%;
+  height: auto;
+}
+
+// List object styles
+.list-object, .list-object div {
+  display: inline;
+}
+
+.list-object .connector {
+  font-style: italic;
+  display: inline;
+  color: #7f8c8d;
+  margin: 0 0.25rem;
+}
+
+// RDF as list styles
+.rdfaslist {
+  .browser, .edition, .actions {
+    display: none;
+  }
+
+  .description {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    margin-top: 1rem;
+    padding: 1rem;
+
+    table {
+      font-size: 16px;
+      width: 100%;
+
+      th {
+        border-bottom: 0;
+        text-align: left;
+        background-color: transparent;
+        color: #2c3e50;
+        font-size: 16px;
+
+        a:first-child, .connector {
+          display: none;
+        }
+      }
+
+      td {
+        .connector {
+          display: inline;
+          color: #7f8c8d;
+          margin: 0 0.25rem;
+        }
+
+        .property-object {
+          display: inline;
+        }
+      }
+    }
+  }
+}
+
+// Metadata styles
+#metadata {
+  table {
+    width: 100%;
+  }
+
+  .input-error {
+    background: #ffebee;
+    border-color: #f44336;
+  }
+
+  .yui-ac-input {
+    position: relative;
+  }
+
+  .yui-ac-container {
+    width: 200%;
+  }
+
+  .ac-label {
+    display: inline;
+    margin-right: 0.5rem;
+    font-weight: 500;
+  }
+
+  .ac-uri {
+    color: #95a5a6;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .ac-range {
+    color: #7f8c8d;
+    display: inline;
+    font-size: 14px;
+    text-align: right;
+  }
+
+  input[type="text"].literal {
+    width: 82%;
+  }
+
+  select[name="lang"] {
+    width: 15%;
+    float: right;
+    margin-right: 1px;
+  }
+
+  input[type="text"], input[type="password"], select, textarea {
+    width: 99%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  input, select, textarea {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  img {
+    vertical-align: top;
+  }
+}
+
+// Wait image
+#waitImage {
+  clear: both;
+  position: relative;
+  left: 50%;
+  width: 32px;
+  margin-left: -16px;
+  margin-top: 1rem;
+}
+
+// YUI tooltip styles
+.yui-skin-sam .yui-tt .bd {
+  color: #2c3e50 !important;
+  background-color: #ecf0f1 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  border: 1px solid #95a5a6 !important;
+  font-size: 14px !important;
+  padding: 0.5rem !important;
+  border-radius: 4px !important;
+}
+
+// Responsive design
 @media (max-width: 991px) {
   .ontology-container {
-    padding: 1rem;
+    padding: 1.5rem;
     max-width: 100%;
-    margin: 1rem auto 1rem auto; // también ajusta el margen en móvil
+    margin: 1rem auto;
   }
-  .ontology-frame {
-    min-height: 400px;
+
+  .ontology-title {
+    font-size: 2rem;
+  }
+
+  .rdf2html {
+    font-size: 14px;
+
+    td, th {
+      font-size: 14px;
+      padding: 0.5rem;
+    }
+  }
+
+  .description {
+    padding: 1rem;
+    margin: 1rem 0;
+
+    table {
+      font-size: 14px;
+
+      th {
+        font-size: 16px;
+        padding: 0.75rem;
+      }
+
+      td {
+        padding: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .ontology-container {
+    padding: 1rem;
+    margin: 0.5rem auto;
+  }
+
+  .ontology-title {
+    font-size: 1.75rem;
+  }
+
+  .rdf2html {
+    font-size: 13px;
+  }
+
+  .description table th {
+    font-size: 14px;
   }
 }

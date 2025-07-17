@@ -2,7 +2,7 @@ import { query } from "@angular/animations";
 
 const sparqlExamples = [
   {
-    key:"basicQuery",
+    key: "basicQuery",
     button: "Simple Query To Retrieve Images",
     description: "A basic query to retrieve images and their distances from a given image.",
     query: `PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
@@ -14,8 +14,36 @@ SELECT ?Source ?Target ?Distance WHERE{ ?Rel imo:sourceImage ?Source;
   },
 
   {
+    key: "imgpediaClustering",
+    button: "Imgpedia Resource Clustering",
+    description: "Clustering Imgpedia resources based on their vector descriptors.",
+    query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
+PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+#Using CLUSTER BY to group dog related images based on their HOG vector descriptors
+
+#Only kmeans clustering is supported at the moment for Imgpedia resources,
+#but other clustering algorithms like k-medoids, DBSCAN can be used for Wikidata resources or others.
+
+#TO LEARN MORE ABOUT CLUSTERING OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
+
+SELECT ?img ?c WHERE {
+  SERVICE <https://query.wikidata.org/sparql>{
+    ?dog wdt:P31 wd:Q144 . # Dogs
+  }
+  ?img imo:associatedWith ?dog .
+  ?vector a imo:HOG ;
+  imo:describes ?img ;
+  imo:value ?hog .
+}
+CLUSTER BY ?hog WITH sim:kmeans(3) AS ?c
+    `
+  },
+  {
     key: "federatedClustering",
-    button: "Federated Clustering",
+    button: "Federated Clustering of External Resources",
     description: "Grouping countries by life expectancy and HDI using the new operator CLUSTER BY.",
     query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
 PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
@@ -30,7 +58,7 @@ SELECT DISTINCT ?country (?countryLabelES AS ?countryname) ?lifeExpectancy ?hdi 
     ?country wdt:P31 wd:Q6256 ;           
             wdt:P2250 ?lifeExpectancy ;  
             wdt:P297 ?isoCode ;          
-            wdt:P1081 ?hdi .  # IDH 
+            wdt:P1081 ?hdi .  # HDI 
     OPTIONAL { ?country rdfs:label ?countryLabelES FILTER (lang(?countryLabelES) = "es") }
 
     BIND(?hdi * 10 AS ?scaledHDI)
@@ -39,31 +67,6 @@ SELECT DISTINCT ?country (?countryLabelES AS ?countryname) ?lifeExpectancy ?hdi 
 CLUSTER BY ?lifeExpectancy ?hdi WITH sim:kmeans(4) AS ?c
 `
   },
-
-  {
-    key: "imgpediaClustering",
-    button: "Imgpedia Resource Clustering",
-    description: "Clustering Imgpedia resources based on their vector descriptors.",
-    query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
-PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-
-#Using CLUSTER BY to group dog related images based on their HOG vector descriptors
-
-SELECT ?img ?c WHERE {
-  SERVICE <https://query.wikidata.org/sparql>{
-    ?dog wdt:P31 wd:Q144 . # Dogs
-  }
-  ?img imo:associatedWith ?dog .
-  ?vector a imo:HOG ;
-  imo:describes ?img ;
-  imo:value ?hog .
-}
-CLUSTER BY ?hog WITH sim:kmeans(3) AS ?c
-    `
-  },
-
   {
     key: "simiJoinFede",
     button: "Similarity Join Query ",
@@ -78,6 +81,11 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 # Then, it finds the 10 most similar IMGpedia images that are associated with any tower
 # (as defined in Wikidata), using the Manhattan distance between HOG descriptors
 # via the SIMILARITY JOIN operator.
+
+#Only use sim:manhattanvec for Imgpedia resources, since the descriptors are vectors in String format
+#But if the literal value is numeric, sim:manhattan can be used to calculate the distance.
+
+#TO LEARN MORE ABOUT SIMILARITY JOIN OPERATOR, VISIT: https://sferrada.com/publication/2024-sw-ferrada-simjoin/2024-SW-ferrada-simjoin.pdf
 
 SELECT ?img2 ?tower ?dist WHERE {
 { ?img1 imo:associatedWith wd:Q1421270 . # Entel Tower
@@ -94,6 +102,7 @@ SIMILARITY JOIN ON (?hog1) (?hog2) TOP 10 DISTANCE sim:manhattanvec AS ?dist # 1
   imo:describes ?img2 ;
   imo:value ?hog2 .
 }}
+ORDER BY ?dist
 
 `
   }
