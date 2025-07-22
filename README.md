@@ -1,59 +1,62 @@
-# ImgpediaFront
+# IMGpedia Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+## Índice
+- [Introducción](#introducción)
+- [Responsabilidades principales](#responsabilidades-principales)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Tecnologías principales](#tecnologías-principales)
+- [Levantamiento en Ambiente Local](#levantamiento-en-ambiente-local)
+- [Levantamiento en Producción](#levantamiento-en-producción)
+- [Recursos adicionales](#recursos-adicionales)
+- [Contacto](#contacto)
 
-## Development server
+## Introducción
+**IMGpedia Frontend** es la interfaz web que permite a los usuarios interactuar con el conjunto de datos enlazados IMGpedia. Proporciona herramientas visuales para explorar imágenes, realizar consultas SPARQL, gestionar usuarios y cargar datos, integrándose con el backend mediante una API RESTful segura.
 
-To start a local development server, run:
+## Responsabilidades principales
+- Visualización y consulta de imágenes y metadatos de IMGpedia.
+- Interfaz para consultas SPARQL y visualización de resultados.
+- Gestión de autenticación y roles de usuario.
+- Carga de archivos RDF a través de la interfaz.
+- Navegación intuitiva y experiencia de usuario moderna.
 
-```bash
-ng serve
-```
+## Estructura del proyecto
+- **components** — Componentes principales de la aplicación (home, login, upload, ontology, query, etc.).
+- **services** — Servicios para autenticación, consultas SPARQL, gestión de imágenes, etc.
+- **models** — Modelos y DTOs utilizados en la comunicación con el backend.
+- **guards** — Guards de rutas para autenticación y autorización.
+- **util** — Utilidades, constantes y datos de ejemplo.
+- **public** — Recursos estáticos (imágenes, favicon, etc.).
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tecnologías principales
+- Angular 19
+- TypeScript
+- RxJS
+- Sass
+- Angular CLI
+- [CodeMirror](https://codemirror.net/) (editor de código embebido)
+- [sparql-editor](https://www.npmjs.com/package/sparql-editor) (editor especializado para consultas SPARQL)
 
-## Code scaffolding
+## Levantamiento en Ambiente Local
+1. Instala las dependencias del proyecto:
+    ```bash
+    npm install
+    ```
+2. Inicia el servidor de desarrollo:
+    ```bash
+    ng serve
+    ```
+3. Abre tu navegador en [http://localhost:4200/](http://localhost:4200/). La aplicación se recargará automáticamente al modificar los archivos fuente.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Levantamiento en Producción
+Para desplegar en producción, ejecuta el workflow de **Build & Deploy** disponible en las *GitHub Actions* del repositorio. Este proceso compilará la aplicación y la publicará automáticamente en el entorno de producción configurado.
 
-```bash
-ng generate component component-name
-```
+## Recursos adicionales
+- [Angular CLI Overview and Command Reference](https://angular.io/cli)
+- [Documentación oficial de Angular](https://angular.io/docs)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Contacto
+Para dudas o contribuciones, contactar con los desarrolladores del proyecto IMGpedia:
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **scferrada**
+- **Elemma00**
