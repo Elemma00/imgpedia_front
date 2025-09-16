@@ -109,7 +109,7 @@ ORDER BY ?dist
 {
     key: "simiJoinPaintings",
     button: "Similarity Join of Paintings",
-    description: " A query that finds similar paintings from Louvre Museum and Spanish paintings using SIMILARITY JOIN.",
+    description: " A query that finds similar paintings from Louvre Museum and Chilean paintings using SIMILARITY JOIN.",
     query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
 PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
 PREFIX wd: <http://www.wikidata.org/entity/>
