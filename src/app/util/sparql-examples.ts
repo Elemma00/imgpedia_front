@@ -105,6 +105,55 @@ SIMILARITY JOIN ON (?hog1) (?hog2) TOP 10 DISTANCE sim:manhattanvec AS ?dist # 1
 ORDER BY ?dist
 
 `
+  }, 
+{
+    key: "simiJoinPaintings",
+    button: "Similarity Join of Paintings",
+    description: " A query that finds similar paintings from Louvre Museum and Spanish paintings using SIMILARITY JOIN.",
+    query: `PREFIX sim: <http://sj.dcc.uchile.cl/sim#>
+PREFIX imo: <http://imgpedia.dcc.uchile.cl/ontology#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dbc: <http://dbpedia.org/resource/Category:>
+
+
+# This query combines data from DBpedia, Wikidata, and IMGpedia to relate images of paintings.
+# It first retrieves Louvre paintings from DBpedia and their images in IMGpedia.
+# Then it finds Spanish paintings from Wikidata and their corresponding images in IMGpedia.
+# It compares their HOG visual descriptors using the Manhattan distance.
+# Finally, it returns the 10 most similar image pairs, along with the distance and the associated painting.
+
+SELECT ?img1 ?img2 ?painting ?dist WHERE {
+{ 
+    SERVICE <https://dbpedia.org/sparql>{
+      ?subcategory skos:broader dbc:Paintings_in_the_collection_of_the_Louvre .
+      ?paintings dcterms:subject ?subcategory;
+                        rdfs:label ?label.
+      ?wiki foaf:primaryTopic ?paintings.
+      FILTER(LANG(?label)='en')
+    }
+    ?img1 imo:appearsIn ?wiki .
+          ?vector1 a imo:HOG ;
+          imo:describes ?img1 ;
+          imo:value ?hog1 .
+}
+SIMILARITY JOIN ON (?hog1) (?hog2) TOP 10 DISTANCE sim:manhattanvec AS ?dist # 10nn w/ Manhattan
+{
+  SERVICE <https://query.wikidata.org/sparql> {
+   ?paintingEntity wdt:P31/wdt:P279* wd:Q3305213 ;  # painting (Q3305213)
+           wdt:P17 wd:Q29 .                         # country: Spain 
   }
+  ?img2 imo:associatedWith ?paintingEntity .
+  ?vector2 a imo:HOG ;
+  imo:describes ?img2 ;
+  imo:value ?hog2 .
+}
+}
+ORDER BY ?dist`
+}
 ];
 export default sparqlExamples;
