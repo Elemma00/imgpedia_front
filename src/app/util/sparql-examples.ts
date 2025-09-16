@@ -123,11 +123,11 @@ PREFIX dbc: <http://dbpedia.org/resource/Category:>
 
 # This query combines data from DBpedia, Wikidata, and IMGpedia to relate images of paintings.
 # It first retrieves Louvre paintings from DBpedia and their images in IMGpedia.
-# Then it finds Spanish paintings from Wikidata and their corresponding images in IMGpedia.
+# Then it finds Chilean paintings from Wikidata and their corresponding images in IMGpedia.
 # It compares their HOG visual descriptors using the Manhattan distance.
 # Finally, it returns the 10 most similar image pairs, along with the distance and the associated painting.
 
-SELECT ?img1 ?img2 ?painting ?dist WHERE {
+SELECT ?img1 ?img2 ?dist WHERE {
 { 
     SERVICE <https://dbpedia.org/sparql>{
       ?subcategory skos:broader dbc:Paintings_in_the_collection_of_the_Louvre .
@@ -145,7 +145,7 @@ SIMILARITY JOIN ON (?hog1) (?hog2) TOP 10 DISTANCE sim:manhattanvec AS ?dist # 1
 {
   SERVICE <https://query.wikidata.org/sparql> {
    ?paintingEntity wdt:P31/wdt:P279* wd:Q3305213 ;  # painting (Q3305213)
-           wdt:P17 wd:Q29 .                         # country: Spain 
+           wdt:P17 wd:Q298 .                         # country: Chile
   }
   ?img2 imo:associatedWith ?paintingEntity .
   ?vector2 a imo:HOG ;
